@@ -115,9 +115,7 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		// Chosse item arrdess 1
 		setting_location_chosse = SETTING_ITEM_ARRDESS_1;
 		// Read setting data
-		eeprom_read(	EEPROM_SETTING_START_ADDR, \
-						(uint8_t*)&settingdata, \
-						sizeof(settingdata));
+		ar_game_setting_read(&settingdata);
 	}
 		break;
 
@@ -152,9 +150,7 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		case SETTING_ITEM_ARRDESS_4: {
 			// Save change and exit
 			settingdata.arrow_speed = 5;
-			eeprom_write(	EEPROM_SETTING_START_ADDR, \
-							(uint8_t*)&settingdata, \
-							sizeof(settingdata));
+			ar_game_setting_write(&settingdata);
 			SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
 			BUZZER_PlayTones(tones_startup);
 		}

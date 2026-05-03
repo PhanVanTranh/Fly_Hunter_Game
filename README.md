@@ -391,7 +391,7 @@ Trong trò chơi, màn hình hiện thị là 1 màn hình **LCD OLed 1.3"** có
 #### 4.1.2 Code
 
 **Archer display:**
-```sh
+```cpp
 void ar_game_archery_display() {
 if (archery.visible == WHITE && settingsetup.num_arrow != 0) {
     view_render.drawBitmap( archery.x, \
@@ -413,7 +413,7 @@ else if (archery.visible == WHITE && settingsetup.num_arrow == 0) {
 ```
 
 **Arrow display:**
-```sh
+```cpp
 void ar_game_arrow_display() {
     for (uint8_t i = 0; i < MAX_NUM_ARROW; i++) {
         if (arrow[i].visible == WHITE) {
@@ -429,7 +429,7 @@ void ar_game_arrow_display() {
 ```
 
 **Meteoroid display:**
-```sh
+```cpp
 void ar_game_meteoroid_display() {
     for (uint8_t i = 0; i < NUM_METEOROIDS; i++) {
         if (meteoroid[i].visible == WHITE) {
@@ -463,7 +463,7 @@ void ar_game_meteoroid_display() {
 ```
 
 **Bang display:**
-```sh
+```cpp
 void ar_game_bang_display() {
     for (uint8_t i = 0; i < NUM_BANG; i++) {
         if (bang[i].visible == WHITE) {
@@ -497,7 +497,7 @@ void ar_game_bang_display() {
 ```
 
 **Border display:**
-```sh
+```cpp
 void ar_game_border_display() {
     if (border.visible == WHITE) {
         view_render.drawFastVLine(  border.x, \
@@ -515,7 +515,7 @@ void ar_game_border_display() {
 ```
 
 **Game frame display:**
-```sh
+```cpp
 void ar_game_frame_display() {
     view_render.setTextSize(1);
     view_render.setTextColor(WHITE);
@@ -532,7 +532,7 @@ void ar_game_frame_display() {
 ```
 
 **Screen display:**
-```sh
+```cpp
 void view_scr_archery_game() {
     if (ar_game_status == GAME_ON) {
         ar_game_frame_display();
@@ -563,7 +563,7 @@ Các âm thanh cần thiết kế: nút nhấn, bắn tên, vụ nổ, nhạc ga
 
 **Code:**
 
-```sh
+```cpp
 // Âm thanh Bắt đầu game 
 BUZZER_PlayTones(tones_SMB);
 
@@ -584,6 +584,7 @@ BUZZER_PlayTones(tones_merryChristmas);
 void BUZZER_Sleep(bool sleep);
 /*  sleep = 0 : bật âm thanh 
     sleep = 1 : tắt âm thanh */
+
 static const Tone_TypeDef tones_BUM[] = {
     {3000,3},
     {4500,6},
@@ -754,3 +755,38 @@ static const Tone_TypeDef tones_merryChristmas[] = {
 </details>
 
 **Ghi chú:** Nếu không có thời gian hoặc không có khiếu âm nhạc thì tốt nhất nên dùng các thư viện trên github
+
+## V. Quản lý EEPROM
+
+EEPROM được sử dụng để lưu lại các dữ liệu cần giữ sau khi tắt nguồn, bao gồm bảng điểm và cấu hình trò chơi. Vì EEPROM có thể chứa dữ liệu rác, nên mỗi khối dữ liệu lưu xuống EEPROM sẽ được bọc thêm `Magic number` và `checksum` để đảm bảo tính toàn vẹn.
+
+### 5.1 Cấu trúc quản lý
+
+Mỗi record lưu vào EEPROM có dạng:
+
+```text
++----------------------+----------------------+----------------------+
+| Magic number         | Data                 | Checksum             |
+| 4 bytes              |                      | 1 byte               |
++----------------------+----------------------+----------------------+
+```
+
+Trong đó:
+- `Magic number`: Với mỗi ứng dụng có 1 Magic number riêng.
+- `Data`: Dữ liệu cần lưu.
+- `Checksum`: Tổng các byte từ `Magic number` đến hết phần `data`, dùng để kiểm tra dữ liệu có bị thay đổi hay không.
+
+### 5.2 Tác dụng
+
+Cơ chế sử dụng `Magic number` kết hợp với `Checksum` giúp đảm bảo tính hợp lệ và toàn vẹn của dữ liệu trong EEPROM:
+- **Phát hiện dữ liệu bị lỗi hoặc bị thay đổi ngoài ý muốn:** `Checksum` cho phép kiểm tra tính toàn vẹn của dữ liệu, tránh sử dụng dữ liệu đã bị hỏng.
+- **Phát hiện dữ liệu phù hợp:** với mỗi ứng dụng nên dùng 1 `Magic number` riêng, việc này giúp tránh đọc nhầm dữ liệu của firmware khác.
+
+**Code:**
+```cpp
+void ar_game_score_read(ar_game_score_t* data);
+void ar_game_score_write(ar_game_score_t* data);
+
+void ar_game_setting_read(ar_game_setting_t* data);
+void ar_game_setting_write(ar_game_setting_t* data);
+```

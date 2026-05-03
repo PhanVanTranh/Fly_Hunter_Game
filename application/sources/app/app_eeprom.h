@@ -18,6 +18,8 @@
 
 #define EEPROM_SETTING_START_ADDR   (0X0100)
 
+#define AR_GAME_EEPROM_MAGIC_NUMBER   ((uint32_t)0x123123BB)
+
 /******************************************************************************/
 /* Archey game */
 /******************************************************************************/
@@ -36,5 +38,21 @@ typedef struct {
   uint8_t arrow_speed;
   uint8_t meteoroid_speed;
 } ar_game_setting_t;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void ar_game_score_set_default(ar_game_score_t* data);
+void ar_game_score_read(ar_game_score_t* data);
+void ar_game_score_write(ar_game_score_t* data);
+
+void ar_game_setting_set_default(ar_game_setting_t* data);
+void ar_game_setting_read(ar_game_setting_t* data);
+void ar_game_setting_write(ar_game_setting_t* data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //__APP_EEPROM_H__

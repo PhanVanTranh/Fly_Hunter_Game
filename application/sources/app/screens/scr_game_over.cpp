@@ -70,9 +70,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 		view_render.initialize();
 		view_render_display_on();
 		// Read score 1st, 2nd, 3rd
-		eeprom_read(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore, \
-						sizeof(gamescore));
+		ar_game_score_read(&gamescore);
 		// Read score play
 		eeprom_read(	EEPROM_SCORE_PLAY_ADDR, \
 						(uint8_t*)&gamescore.score_now, \
@@ -85,9 +83,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_RELEASED\n");
 		// Save score and go Menu game
-		eeprom_write(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore, \
-						sizeof(gamescore));
+		ar_game_score_write(&gamescore);
 		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
 	}
 		BUZZER_PlayTones(tones_cc);
@@ -96,9 +92,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 	case AC_DISPLAY_BUTTON_UP_RELEASED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_UP_RELEASED\n");
 		// Save score and go Charts
-		eeprom_write(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore, \
-						sizeof(gamescore));
+		ar_game_score_write(&gamescore);
 		SCREEN_TRAN(scr_charts_game_handle, &scr_charts_game );
 	}
 		BUZZER_PlayTones(tones_cc);
@@ -107,9 +101,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 	case AC_DISPLAY_BUTTON_DOWN_RELEASED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_DOWN_RELEASED\n");
 		// Save score and restart game
-		eeprom_write(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore, \
-						sizeof(gamescore));
+		ar_game_score_write(&gamescore);
 		SCREEN_TRAN(scr_archery_game_handle, &scr_archery_game );
 	}	
 		BUZZER_PlayTones(tones_cc);

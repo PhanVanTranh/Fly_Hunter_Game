@@ -173,9 +173,7 @@ void view_scr_archery_game() {
 /* Handle - Archery game screen */
 /*****************************************************************************/
 void ar_game_level_setup() {
-	eeprom_read(	EEPROM_SETTING_START_ADDR, \
-					(uint8_t*)&settingsetup, \
-					sizeof(settingsetup));
+	ar_game_setting_read(&settingsetup);
 }
 
 void ar_game_time_tick_setup() {

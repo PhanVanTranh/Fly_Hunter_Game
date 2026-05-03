@@ -58,9 +58,7 @@ void scr_charts_game_handle(ak_msg_t* msg) {
 		view_render.initialize();
 		view_render_display_on();
 		// Read score 
-		eeprom_read(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore_charts, \
-						sizeof(gamescore_charts));
+		ar_game_score_read(&gamescore_charts);
 	}
 		break;
 
@@ -77,9 +75,7 @@ void scr_charts_game_handle(ak_msg_t* msg) {
 		gamescore_charts.score_1st = 0;
 		gamescore_charts.score_2nd = 0;
 		gamescore_charts.score_3rd = 0;
-		eeprom_write(	EEPROM_SCORE_START_ADDR, \
-						(uint8_t*)&gamescore_charts, \
-						sizeof(gamescore_charts));
+		ar_game_score_write(&gamescore_charts);
 	}
 		BUZZER_PlayTones(tones_cc);
 		break;
