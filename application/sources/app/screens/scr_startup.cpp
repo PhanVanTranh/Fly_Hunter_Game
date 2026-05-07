@@ -24,7 +24,7 @@ void view_scr_startup() {
 #define AK_LOGO_AXIS_X		(23)
 #define AK_LOGO_TEXT		(AK_LOGO_AXIS_X + 4)
 	/* ak logo */
-	BUZZER_PlayTones(tones_startup);
+	BUZZER_PlaySound(BUZZER_SOUND_STARTUP);
 	view_render.clear();
 	view_render.setTextSize(1);
 	view_render.setTextColor(WHITE);

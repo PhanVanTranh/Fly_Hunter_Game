@@ -76,6 +76,12 @@ void scr_game_over_handle(ak_msg_t* msg) {
 
 		// Reorganize
 		rank_ranking();
+
+		// Timer show idle screen
+		timer_set(	AC_TASK_DISPLAY_ID, \
+					AC_DISPLAY_SHOW_IDLE, \
+					AC_DISPLAY_IDLE_INTERVAL, \
+					TIMER_ONE_SHOT);
 	} break;
 
 	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
@@ -83,7 +89,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 		// Save score and go Menu game
 		ar_game_score_write(&gamescore);
 		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
 	case AC_DISPLAY_BUTTON_UP_RELEASED: {
@@ -91,7 +97,7 @@ void scr_game_over_handle(ak_msg_t* msg) {
 		// Save score and go Charts
 		ar_game_score_write(&gamescore);
 		SCREEN_TRAN(scr_charts_game_handle, &scr_charts_game );
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
 	case AC_DISPLAY_BUTTON_DOWN_RELEASED: {
@@ -99,7 +105,14 @@ void scr_game_over_handle(ak_msg_t* msg) {
 		// Save score and restart game
 		ar_game_score_write(&gamescore);
 		SCREEN_TRAN(scr_archery_game_handle, &scr_archery_game );
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
+	} break;
+
+	case AC_DISPLAY_SHOW_IDLE: {
+		APP_DBG_SIG("AC_DISPLAY_SHOW_IDLE\n");
+		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE);
+		scr_idle_set_return_screen(scr_game_over_handle, &scr_game_over);
+		SCREEN_TRAN(scr_idle_handle, &scr_idle);
 	} break;
 
 	default:

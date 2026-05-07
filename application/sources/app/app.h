@@ -116,7 +116,7 @@ enum {
 /* define timer */
 #define AC_DISPLAY_INITIAL_INTERVAL									(100)
 #define AC_DISPLAY_STARTUP_INTERVAL									(2000)
-#define AC_DISPLAY_IDLE_INTERVAL									(20000)
+#define AC_DISPLAY_IDLE_INTERVAL									(5000)
 #define AC_DISPLAY_LOGO_INTERVAL									(10000)
 #define AC_DISPLAY_SHOW_IDLE_BALL_MOVING_UPDATE_INTERAL				(150)
 #define AC_DISPLAY_MINIMUM_SCREEN_RENDER_INTERVAL_MS				(50) /* 50ms => Max 20 FPS */
@@ -157,6 +157,7 @@ enum {
  */
 /*****************************************************************************/
 /* define timer */
+#define AR_GAME_OVER_TEXT_ANIM_TICK_INTERVAL						(250)
 #define AR_GAME_TIME_TICK_INTERVAL									(70)
 #define AR_GAME_TIME_EXIT_INTERVAL									(5000)
 /* define signal */

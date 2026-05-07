@@ -68,9 +68,8 @@ void scr_charts_game_handle(ak_msg_t* msg) {
 	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_RELEASED\n");
 		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);	
-	}
-		BUZZER_PlayTones(tones_cc);
-		break;
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
+	} break;
 
 	case AC_DISPLAY_BUTTON_UP_LONG_PRESSED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_UP_LONG_PRESSED\n");
@@ -79,16 +78,21 @@ void scr_charts_game_handle(ak_msg_t* msg) {
 		gamescore_charts.score_2nd = 0;
 		gamescore_charts.score_3rd = 0;
 		ar_game_score_write(&gamescore_charts);
-	}
-		BUZZER_PlayTones(tones_cc);
-		break;
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
+	} break;
 
 	case AC_DISPLAY_BUTTON_DOWN_RELEASED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_DOWN_RELEASED\n");
 		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
-	}	
-		BUZZER_PlayTones(tones_cc);
-		break;
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
+	} break;
+
+	case AC_DISPLAY_SHOW_IDLE: {
+		APP_DBG_SIG("AC_DISPLAY_SHOW_IDLE\n");
+		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE);
+		scr_idle_set_return_screen(scr_charts_game_handle, &scr_charts_game);
+		SCREEN_TRAN(scr_idle_handle, &scr_idle);
+	} break;
 
 	default:
 		break;

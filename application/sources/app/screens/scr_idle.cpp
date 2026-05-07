@@ -97,6 +97,20 @@ view_screen_t scr_idle = {
 
 vector<ball> v_idle_ball;
 int ball::total;
+static screen_f scr_idle_return_handle = scr_menu_game_handle;
+static view_screen_t* scr_idle_return_view = &scr_menu_game;
+
+void scr_idle_set_return_screen(screen_f handle, view_screen_t* screen) {
+	if (handle != (screen_f)0 && screen != VIEW_SCREEN_NULL) {
+		scr_idle_return_handle = handle;
+		scr_idle_return_view = screen;
+	}
+}
+
+static void scr_idle_return_screen() {
+	timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE_BALL_MOVING_UPDATE);
+	SCREEN_TRAN(scr_idle_return_handle, scr_idle_return_view);
+}
 
 void view_scr_idle() {
 	for(ball _ball : v_idle_ball) {
@@ -117,6 +131,10 @@ void scr_idle_handle(ak_msg_t* msg) {
 			v_idle_ball.push_back(new_ball);
 		}
 
+		// Remove timer show idle screen 
+		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE);
+
+		// Timer ball moving update
 		timer_set(AC_TASK_DISPLAY_ID, \
 				AC_DISPLAY_SHOW_IDLE_BALL_MOVING_UPDATE, \
 				AC_DISPLAY_SHOW_IDLE_BALL_MOVING_UPDATE_INTERAL, \
@@ -131,8 +149,7 @@ void scr_idle_handle(ak_msg_t* msg) {
 
 	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
 		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_RELEASED\n");
-		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE_BALL_MOVING_UPDATE);
-		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
+		scr_idle_return_screen();
 	} break;
 
 	case AC_DISPLAY_BUTTON_UP_RELEASED: {
@@ -151,7 +168,7 @@ void scr_idle_handle(ak_msg_t* msg) {
 			v_idle_ball.push_back(new_ball);
 		}
 		else {
-			BUZZER_PlayTones(tones_3beep);
+			BUZZER_PlaySound(BUZZER_SOUND_3BEEP);
 		}
 	} break;
 
@@ -163,8 +180,7 @@ void scr_idle_handle(ak_msg_t* msg) {
 		}
 
 		if (v_idle_ball.empty()) {
-			timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE_BALL_MOVING_UPDATE);
-			SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
+			scr_idle_return_screen();
 		}
 	} break;
 

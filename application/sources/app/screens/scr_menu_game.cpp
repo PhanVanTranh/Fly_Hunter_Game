@@ -219,6 +219,7 @@ void screen_tran_menu() {
 	} break; 
 
 	case 3: { // item 4
+		scr_idle_set_return_screen(scr_menu_game_handle, &scr_menu_game);
 		SCREEN_TRAN(scr_idle_handle,			&scr_idle			);
 	} break;
 	
@@ -242,6 +243,9 @@ void scr_menu_game_handle(ak_msg_t* msg) {
 	} break;
 
 	case AC_DISPLAY_SHOW_IDLE: {
+		APP_DBG_SIG("AC_DISPLAY_SHOW_IDLE\n");
+		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE);
+		scr_idle_set_return_screen(scr_menu_game_handle, &scr_menu_game);
 		SCREEN_TRAN(scr_idle_handle,&scr_idle);
 	} break;
 
@@ -269,14 +273,7 @@ void scr_menu_game_handle(ak_msg_t* msg) {
 		}
 
 		update_menu_screen_chosse();
-
-		// Reset timer switch to scr_idle
-		timer_set(	AC_TASK_DISPLAY_ID, \
-					AC_DISPLAY_SHOW_IDLE, \
-					AC_DISPLAY_IDLE_INTERVAL, \
-					TIMER_ONE_SHOT);
-
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
 	case AC_DISPLAY_BUTTON_DOWN_RELEASED: {
@@ -299,14 +296,7 @@ void scr_menu_game_handle(ak_msg_t* msg) {
 		}
 
 		update_menu_screen_chosse();
-
-		// Reset timer switch to scr_idle
-		timer_set(	AC_TASK_DISPLAY_ID, \
-					AC_DISPLAY_SHOW_IDLE, \
-					AC_DISPLAY_IDLE_INTERVAL, \
-					TIMER_ONE_SHOT);
-
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
 	default:

@@ -1,13 +1,40 @@
 #include "scr_archery_game.h"
 
+#include <stdlib.h>
+
 #include "screens.h"
 
 /*****************************************************************************/
 /* Variable Declaration - Archery game screen */
 /*****************************************************************************/
+#define AR_GAME_COMMAND_TEXT_MAX_LEN		(10)
+#define AR_GAME_HIGHSCORE_SCORE				(300)
+#define AR_GAME_ARRAY_SIZE(arr)				(sizeof(arr) / sizeof((arr)[0]))
+
 uint8_t ar_game_state; 
 ar_game_setting_t settingsetup;
 static uint8_t ar_game_over_text_index = 0;
+
+static const char* ar_game_over_text = " Too Bad!";
+static const char* const ar_game_praise_text[] = {
+    "Excellent",  // 9
+    "Good Job!",  // 9
+    "  Great!",   // 8
+    " Amazing!",  // 9
+    " Winner!"    // 8
+};
+
+static const char* const ar_game_blame_text[] = {
+    " Too Bad!",  // 9
+    " Try More",  // 9
+    " Missed!",   // 8
+    "  Oops!",    // 6
+    " So Close"   // 9
+};
+
+static const char* ar_game_random_text(const char* const* text_list, uint8_t text_count) {
+	return text_list[rand() % text_count];
+}
 
 static void ar_game_print_text_partial(const char* text, uint8_t max_chars) {
 	if (text == NULL) return;
@@ -182,21 +209,7 @@ void view_scr_archery_game() {
 		view_render.setTextSize(1);
 		view_render.setTextColor(WHITE);
 		view_render.setCursor(74, 15);
-		if (gamescore.score_now > 1000) {
-			ar_game_print_text_partial("Legendary", ar_game_over_text_index);
-		}
-		else if (gamescore.score_now > 800) {
-			ar_game_print_text_partial("Excellent", ar_game_over_text_index);
-		}
-		else if (gamescore.score_now > 500) {
-			ar_game_print_text_partial(" Great!", ar_game_over_text_index);
-		}
-		else if (gamescore.score_now > 200) {
-			ar_game_print_text_partial(" Not bad!", ar_game_over_text_index);
-		}
-		else {
-			ar_game_print_text_partial(" Too Bad!", ar_game_over_text_index);
-		}
+		ar_game_print_text_partial(ar_game_over_text, ar_game_over_text_index);
 	}
 }
 
@@ -249,12 +262,6 @@ void scr_archery_game_handle(ak_msg_t* msg) {
 		// Reset text animation index
 		ar_game_over_text_index = 0;
 
-		// Setup text animation timer
-		timer_set(	AC_TASK_DISPLAY_ID, \
-					AR_GAME_OVER_TEXT_ANIM_TICK, \
-					250, \
-					TIMER_PERIODIC);
-
 		// Timer Exit
 		timer_set(	AC_TASK_DISPLAY_ID, \
 					AR_GAME_EXIT_GAME, \
@@ -267,15 +274,34 @@ void scr_archery_game_handle(ak_msg_t* msg) {
 		ar_game_score_write(&gamescore);
 		ar_game_score = 10;
 
+		// Setup text animation timer
+		timer_set(	AC_TASK_DISPLAY_ID, \
+					AR_GAME_OVER_TEXT_ANIM_TICK, \
+					AR_GAME_OVER_TEXT_ANIM_TICK_INTERVAL, \
+					TIMER_PERIODIC);
+
+		if (gamescore.score_now > AR_GAME_HIGHSCORE_SCORE) {
+			ar_game_over_text = ar_game_random_text(ar_game_praise_text, \
+													AR_GAME_ARRAY_SIZE(ar_game_praise_text));
+			BUZZER_PlaySound(BUZZER_SOUND_HIGHSCORE);
+		}
+		else {
+			ar_game_over_text = ar_game_random_text(ar_game_blame_text, \
+													AR_GAME_ARRAY_SIZE(ar_game_blame_text));
+			BUZZER_PlaySound(BUZZER_SOUND_LOWSCORE);
+		}
+
 		// State update
 		ar_game_state = GAME_OVER;
-		BUZZER_PlayTones(tones_3beep);
 	} break;
 
 	case AR_GAME_OVER_TEXT_ANIM_TICK: {
 		APP_DBG_SIG("AR_GAME_OVER_TEXT_ANIM_TICK\n");
-		if (ar_game_over_text_index < 10) {
+		if (ar_game_over_text_index < AR_GAME_COMMAND_TEXT_MAX_LEN) {
 			ar_game_over_text_index++;
+		}
+		else {
+			timer_remove_attr(AC_TASK_DISPLAY_ID, AR_GAME_OVER_TEXT_ANIM_TICK);
 		}
 	} break;
 
@@ -289,7 +315,7 @@ void scr_archery_game_handle(ak_msg_t* msg) {
 		// State update
 		ar_game_state = GAME_OFF;
 		// Change the screen
-		SCREEN_TRAN(scr_game_over_handle, &scr_game_over);		
+		SCREEN_TRAN(scr_game_over_handle, &scr_game_over);
 	} break;
 
 	default:

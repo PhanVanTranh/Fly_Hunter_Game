@@ -36,7 +36,7 @@ void ar_game_arrow_handle(ak_msg_t *msg) {
 	case AR_GAME_ARROW_SHOOT: {
 		APP_DBG_SIG("AR_GAME_ARROW_SHOOT\n");
 		if (settingsetup.num_arrow == 0) {
-			BUZZER_PlayTones(tones_3beep);
+			BUZZER_PlaySound(BUZZER_SOUND_3BEEP);
 		}
 		else {
 			for (uint8_t i = 0; i < MAX_NUM_ARROW; i++) {
@@ -47,7 +47,7 @@ void ar_game_arrow_handle(ak_msg_t *msg) {
 					if (settingsetup.num_arrow < 1) {
 						archery.action_image = AR_GAME_ARCHERY_ACTION_IMAGE_2;
 					}
-					BUZZER_PlayTones(tones_cc);
+					BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 					break;
 				}
 			}

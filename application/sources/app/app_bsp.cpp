@@ -35,6 +35,12 @@ void btn_mode_callback(void* b) {
 		}
 		else {
 			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_MODE_RELEASED);
+
+			// Reset timer show idle screen
+			timer_set(	AC_TASK_DISPLAY_ID, \
+						AC_DISPLAY_SHOW_IDLE, \
+						AC_DISPLAY_IDLE_INTERVAL, \
+						TIMER_ONE_SHOT);
 		}
 	} break;
 
@@ -63,6 +69,11 @@ void btn_up_callback(void* b) {
 		}
 		else {
 			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_UP_RELEASED);
+			// Reset timer show idle screen
+			timer_set(	AC_TASK_DISPLAY_ID, \
+						AC_DISPLAY_SHOW_IDLE, \
+						AC_DISPLAY_IDLE_INTERVAL, \
+						TIMER_ONE_SHOT);
 		}
 	} break;
 
@@ -92,6 +103,11 @@ void btn_down_callback(void* b) {
 		}
 		else {
 			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_DOWN_RELEASED);
+			// Reset timer show idle screen
+			timer_set(	AC_TASK_DISPLAY_ID, \
+						AC_DISPLAY_SHOW_IDLE, \
+						AC_DISPLAY_IDLE_INTERVAL, \
+						TIMER_ONE_SHOT);
 		}
 	} break;
 

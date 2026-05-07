@@ -148,13 +148,13 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 			settingdata.arrow_speed = AR_GAME_SETTING_ARROW_SPEED_DEFAULT;
 			ar_game_setting_write(&settingdata);
 			SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
-			BUZZER_PlayTones(tones_startup);
+			BUZZER_PlaySound(BUZZER_SOUND_STARTUP);
 		} break;
 
 		default: 
 			break;
 		}
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 	
 	case AC_DISPLAY_BUTTON_UP_LONG_PRESSED: {
@@ -166,7 +166,7 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		
 		// Setting buzzer
 		BUZZER_Sleep(settingdata.silent);
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
 	case AC_DISPLAY_BUTTON_UP_RELEASED: {
@@ -176,7 +176,7 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		if (setting_location_chosse == SETTING_ITEM_ARRDESS_0) { 
 			setting_location_chosse = SETTING_ITEM_ARRDESS_4;
 		}
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
 	case AC_DISPLAY_BUTTON_DOWN_LONG_PRESSED: {
@@ -188,7 +188,7 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		
 		// Setting buzzer
 		BUZZER_Sleep(settingdata.silent);
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
 	case AC_DISPLAY_BUTTON_DOWN_RELEASED: {
@@ -198,7 +198,14 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		if (setting_location_chosse > SETTING_ITEM_ARRDESS_4) { 
 			setting_location_chosse = SETTING_ITEM_ARRDESS_1;
 		}
-		BUZZER_PlayTones(tones_cc);
+		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
+	} break;
+
+	case AC_DISPLAY_SHOW_IDLE: {
+		APP_DBG_SIG("AC_DISPLAY_SHOW_IDLE\n");
+		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE);
+		scr_idle_set_return_screen(scr_game_setting_handle, &scr_game_setting);
+		SCREEN_TRAN(scr_idle_handle, &scr_idle);
 	} break;
 
 	default:

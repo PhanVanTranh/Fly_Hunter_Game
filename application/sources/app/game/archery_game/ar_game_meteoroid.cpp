@@ -70,7 +70,7 @@ void ar_game_meteoroid_handle(ak_msg_t *msg) {
 
                             // Update score and play sound
                             ar_game_score += 10;
-                            BUZZER_PlayTones(tones_BUM);
+                            BUZZER_PlaySound(BUZZER_SOUND_BANG);
                             break;
                         }
 					}
