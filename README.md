@@ -1,4 +1,4 @@
-# Archery Game - Build on AK Embedded Base Kit
+<h1 align="center">Archery Game - Build on AK Embedded Base Kit</h1>
 
 <table>
   <tr>
@@ -6,11 +6,12 @@
   </tr>
 </table>
 
+<h1 align="center">Gameplay Demo</h1>
 <div align="center">
     <video src="https://github.com/ak-embedded-software/archery-game/assets/54855481/d493703c-bf5b-4fd2-ae04-b86784a01231" alt="epcb archery game" height=200/>
 </div>
 
-## Documentation
+# Documentation
 
 | File | Description |
 |---|---|
@@ -21,11 +22,11 @@
 | [docs/display-design.md](docs/display-design.md) | Display design notes for screen layout, bitmap assets, rendering flow, and screen transitions. |
 | [docs/buzzer-audio.md](docs/buzzer-audio.md) | Buzzer and audio behavior notes for sound effects, silent mode, playback timing, and related APIs. |
 
-## I. Introduction
+# Introduction
 
 The Archery game is a game running on the AK Embedded Base Kit. It is built to help embedded programming enthusiasts learn and practice event-driven programming. During the development of the archery game, you will learn more about designing and applying UML, Tasks, Signals, Timers, Messages, State-machines,...
 
-### 1.1 Hardware
+## I. Hardware
 
 <table align="center">
   <tr>
@@ -39,7 +40,7 @@ The Archery game is a game running on the AK Embedded Base Kit. It is built to h
 The KIT integrates **1.54" Oled LCD**, **3 push buttons**, and **1 Buzzers** that play music, to learn **the event-driven system** through hands-on game machine design.
 The KIT also integrates **RS485**, **Qwiic Connect System**, and **Grove Ecosystems**, suitable for prototyping practical applications in embedded systems.
 
-#### 1.1.1 MCU Overview
+**MCU Overview:**
 
 ```text
 SoC Name : STM32L151CBT6
@@ -57,7 +58,7 @@ Flash Partitions Layout
 => Archery Game firmware
 ```
 
-SoC name breakdown:
+**MCU Naming Convention:**
 
 | Part | Meaning |
 |---|---|
@@ -77,7 +78,7 @@ SoC name breakdown:
 </table>
 <p align="center"><strong><em>Figure 2:</em></strong> Board view Top + Bottom </p>
 
-### 1.2 Game Description and Objects
+## II. Game Description and Objects
 The following description of the **“Archery game”**, explains how to play and the game's processing mechanism. This document is used for reference in designing and developing the game later.
 
 <table align="center">
@@ -100,23 +101,23 @@ The game starts with the **Menu game** screen with the following options:
 </table>
 <p align="center"><strong><em>Figure 3:</em></strong> Game play screen and objects</p>
 
-#### 1.2.1 Objects in the Game:
-|Object|Object Name|Description|
-|---|---|---|
-|**Bow**|Archery|Move up/down to select the position to shoot the arrow|
-|**Arrow**|Arrow|Shot from the bow, used to destroy meteoroids|
-|**Explosion**|Bang|Effect that appears when meteoroid is destroyed|
-|**Border**|Border|Safe zone to protect from meteoroids falling into|
-|**Meteoroid**|Meteoroid|Object flying towards the bow with increasing speed, capable of destroying the border|
+### Objects in the Game:
+|Object Name|Description|
+|---|---|
+|**Archery**|Move up/down to select the position to shoot the arrow|
+|**Arrow**|Shot from the bow, used to destroy meteoroids|
+|**Bang**|Effect that appears when meteoroid is destroyed|
+|**Border**|Safe zone to protect from meteoroids falling into|
+|**Meteoroid**|Object flying towards the bow with increasing speed, capable of destroying the border|
 
-**(*)** In the rest of the document, the names of the objects will be used to refer to the objects.
+> **Note:** For detailed object runtime sequences, see [Game Object Sequences](docs/game-object-sequences.md).
 
-#### 1.2.2 How to Play:
+## III. How to Play:
 - In this game, you will control the Archery, move **up/down** with the **[Up]/[Down]** buttons, to select the position to **shoot** the Arrow.
 - When pressing the **[Mode]** button, the Arrow will be shot, aiming to destroy the incoming Meteoroids.
 - The goal of the game is to get as many points as possible, the game will end when a Meteoroid touches the Border.
 
-#### 1.2.3 Game Mechanics:
+### Game Mechanics:
 - **Scoring:** Points are calculated by the number of Meteoroids destroyed. Each destroyed Meteoroid corresponds to 10 points. The accumulated score will be displayed in the bottom right corner of the screen.
 - **Difficulty:** Every time 200 points are accumulated, the Meteoroid's flying speed will increase by one level. The initial difficulty can be set in the **Setting** section.
 - **Arrow Limit:** When shooting, the number of available Arrows will decrease corresponding to the number of flying Arrows, if the available Arrows decrease to "0", you cannot shoot and there will be a warning sound. The number of available Arrows will be restored when a Meteoroid is destroyed or the Arrow flies off the screen. The number of Arrows is displayed in the bottom left corner of the screen and can be changed in the **Setting**.
@@ -126,6 +127,8 @@ The game starts with the **Menu game** screen with the following options:
   - **Restart:** play again.
   - **Charts:** go to view the leaderboard.
   - **Home:** back to the game menu.
+
+> **Note:** In the new game version, you will receive a rating from the Mafia Dolphin before entering the Game Over screen, so try to score as many points as possible to earn praise.
 
 <table align="center">
   <tr>
@@ -141,20 +144,20 @@ The game starts with the **Menu game** screen with the following options:
 </table>
 <p align="center"><strong><em>Figure 6:</em></strong> Game_over screen 2</p>
 
-### 1.3 Basic Game Sequence Logic
+## IV. Basic Game Sequence Logic
+
+> **Note:** For a more detailed sequence flow, see [Runtime Signal Processing](docs/runtime-signal-processing.md).
 
 <table align="center">
-    <td align="center">For a more detailed sequence flow, see <a href="docs/runtime-signal-processing.md">Runtime Signal Processing</a>.</td>
-  </tr>
   <tr>
     <td align="center"><img src="resources/images/sequence_object/basic_archery_game_sequence_logic.png" alt="basic archery game sequence logic" width="720"/></td>
   </tr>
-  <tr>
 </table>
 <p align="center"><strong><em>Figure 4:</em></strong> Basic game sequence logic</p>
 
-## Contact & Support
-**Phan Quoc Buu** - Embedded Software Engineer <br/>
+# Contact & Support
+<p style="font-size: 20px;"><strong>Phan Quoc Buu</strong> - Embedded Software Engineer</p>
+
 ``` Note
 Thank you for visiting this repository.  
 If you have any questions, suggestions, or feedback about this project or firmware development, feel free to contact me directly
