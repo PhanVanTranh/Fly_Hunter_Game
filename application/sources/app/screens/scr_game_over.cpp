@@ -59,20 +59,20 @@ void scr_game_over_handle(ak_msg_t* msg) {
 					TIMER_ONE_SHOT);
 	} break;
 
-	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_RELEASED\n");
+	case AC_DISPLAY_BUTTON_MODE_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_PRESSED\n");
 		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
 		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
-	case AC_DISPLAY_BUTTON_UP_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_UP_RELEASED\n");
+	case AC_DISPLAY_BUTTON_UP_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_UP_PRESSED\n");
 		SCREEN_TRAN(scr_charts_game_handle, &scr_charts_game );
 		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
-	case AC_DISPLAY_BUTTON_DOWN_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_DOWN_RELEASED\n");
+	case AC_DISPLAY_BUTTON_DOWN_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_DOWN_PRESSED\n");
 		SCREEN_TRAN(scr_archery_game_handle, &scr_archery_game );
 		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;

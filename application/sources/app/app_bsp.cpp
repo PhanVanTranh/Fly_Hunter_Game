@@ -20,7 +20,18 @@ void btn_mode_callback(void* b) {
 	switch (me_b->state) {
 	case BUTTON_SW_STATE_PRESSED: {
 		APP_DBG("[%s] BUTTON_SW_STATE_PRESSED\n", __func__);
-		// task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_MODE_PRESSED);
+		if (ar_game_state != GAME_OFF) {
+			task_post_pure_msg(AR_GAME_ARROW_ID, AR_GAME_ARROW_SHOOT);
+		}
+		else {
+			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_MODE_PRESSED);
+
+			// Reset timer show idle screen
+			timer_set(	AC_TASK_DISPLAY_ID, \
+						AC_DISPLAY_SHOW_IDLE, \
+						AC_DISPLAY_IDLE_INTERVAL, \
+						TIMER_ONE_SHOT);
+		}
 	} break;
 
 	case BUTTON_SW_STATE_LONG_PRESSED: {
@@ -30,18 +41,6 @@ void btn_mode_callback(void* b) {
 
 	case BUTTON_SW_STATE_RELEASED: {
 		APP_DBG("[%s] BUTTON_SW_STATE_RELEASED\n", __func__);
-		if (ar_game_state != GAME_OFF) {
-			task_post_pure_msg(AR_GAME_ARROW_ID, AR_GAME_ARROW_SHOOT);
-		}
-		else {
-			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_MODE_RELEASED);
-
-			// Reset timer show idle screen
-			timer_set(	AC_TASK_DISPLAY_ID, \
-						AC_DISPLAY_SHOW_IDLE, \
-						AC_DISPLAY_IDLE_INTERVAL, \
-						TIMER_ONE_SHOT);
-		}
 	} break;
 
 	default:
@@ -54,7 +53,17 @@ void btn_up_callback(void* b) {
 	switch (me_b->state) {
 	case BUTTON_SW_STATE_PRESSED: {
 		APP_DBG("[%s] BUTTON_SW_STATE_PRESSED\n", __func__);
-		// task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_UP_PRESSED);
+		if (ar_game_state != GAME_OFF) {
+			task_post_pure_msg(AR_GAME_ARCHERY_ID, AR_GAME_ARCHERY_UP);
+		}
+		else {
+			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_UP_PRESSED);
+			// Reset timer show idle screen
+			timer_set(	AC_TASK_DISPLAY_ID, \
+						AC_DISPLAY_SHOW_IDLE, \
+						AC_DISPLAY_IDLE_INTERVAL, \
+						TIMER_ONE_SHOT);
+		}
 	} break;
 
 	case BUTTON_SW_STATE_LONG_PRESSED: {
@@ -64,17 +73,6 @@ void btn_up_callback(void* b) {
 
 	case BUTTON_SW_STATE_RELEASED: {
 		APP_DBG("[%s] BUTTON_SW_STATE_RELEASED\n", __func__);
-		if (ar_game_state != GAME_OFF) {
-			task_post_pure_msg(AR_GAME_ARCHERY_ID, AR_GAME_ARCHERY_UP);
-		}
-		else {
-			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_UP_RELEASED);
-			// Reset timer show idle screen
-			timer_set(	AC_TASK_DISPLAY_ID, \
-						AC_DISPLAY_SHOW_IDLE, \
-						AC_DISPLAY_IDLE_INTERVAL, \
-						TIMER_ONE_SHOT);
-		}
 	} break;
 
 	default:
@@ -87,7 +85,17 @@ void btn_down_callback(void* b) {
 	switch (me_b->state) {
 	case BUTTON_SW_STATE_PRESSED: {
 		APP_DBG("[%s] BUTTON_SW_STATE_PRESSED\n", __func__);
-		// task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_DOWN_PRESSED);
+		if (ar_game_state != GAME_OFF) {
+			task_post_pure_msg(AR_GAME_ARCHERY_ID, AR_GAME_ARCHERY_DOWN);
+		}
+		else {
+			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_DOWN_PRESSED);
+			// Reset timer show idle screen
+			timer_set(	AC_TASK_DISPLAY_ID, \
+						AC_DISPLAY_SHOW_IDLE, \
+						AC_DISPLAY_IDLE_INTERVAL, \
+						TIMER_ONE_SHOT);
+		}
 	} break;
 
 	case BUTTON_SW_STATE_LONG_PRESSED: {
@@ -98,17 +106,6 @@ void btn_down_callback(void* b) {
 
 	case BUTTON_SW_STATE_RELEASED: {
 		APP_DBG("[%s] BUTTON_SW_STATE_RELEASED\n", __func__);
-		if (ar_game_state != GAME_OFF) {
-			task_post_pure_msg(AR_GAME_ARCHERY_ID, AR_GAME_ARCHERY_DOWN);
-		}
-		else {
-			task_post_pure_msg(AC_TASK_DISPLAY_ID, AC_DISPLAY_BUTTON_DOWN_RELEASED);
-			// Reset timer show idle screen
-			timer_set(	AC_TASK_DISPLAY_ID, \
-						AC_DISPLAY_SHOW_IDLE, \
-						AC_DISPLAY_IDLE_INTERVAL, \
-						TIMER_ONE_SHOT);
-		}
 	} break;
 
 	default:

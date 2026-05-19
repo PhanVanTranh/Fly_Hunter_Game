@@ -244,14 +244,16 @@ void scr_archery_game_handle(ak_msg_t* msg) {
 		task_post_pure_msg(AR_GAME_METEOROID_ID, 	AR_GAME_METEOROID_SETUP);
 		task_post_pure_msg(AR_GAME_BANG_ID, 	 	AR_GAME_BANG_SETUP);
 		task_post_pure_msg(AR_GAME_BORDER_ID, 	 	AR_GAME_BORDER_SETUP);
-		
+
+		// Set state 'GAME_PLAY' & remove idle screen timer
+		ar_game_state = GAME_PLAY;
+		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE);
+
 		// Setup timer
 		timer_set(	AC_TASK_DISPLAY_ID, \
 					AR_GAME_TIME_TICK, \
 					AR_GAME_TIME_TICK_INTERVAL, \
 					TIMER_PERIODIC);
-		// State update
-		ar_game_state = GAME_PLAY;
 	} break;
 
 	case AR_GAME_TIME_TICK: {
@@ -328,12 +330,16 @@ void scr_archery_game_handle(ak_msg_t* msg) {
 
 	case AR_GAME_EXIT_GAME: {
 		APP_DBG_SIG("AR_GAME_EXIT_GAME\n");
-
 		// Stop text animation timer
 		timer_remove_attr(AC_TASK_DISPLAY_ID, AR_GAME_OVER_TEXT_ANIM_TICK);
 
-		// State update
+		// Set state 'GAME_OFF' & set timer show idle screen
 		ar_game_state = GAME_OFF;
+		timer_set(	AC_TASK_DISPLAY_ID, \
+			AC_DISPLAY_SHOW_IDLE, \
+			AC_DISPLAY_IDLE_INTERVAL, \
+			TIMER_ONE_SHOT);
+
 		// Change the screen
 		SCREEN_TRAN(scr_game_over_handle, &scr_game_over);
 	} break;

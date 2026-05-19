@@ -117,8 +117,8 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		ar_game_setting_read(&settingdata);
 	} break;
 
-	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_RELEASED\n");
+	case AC_DISPLAY_BUTTON_MODE_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_PRESSED\n");
 		// Change setting data
 		switch (setting_location_chosse) {
 		case SETTING_ITEM_ARRDESS_1: {
@@ -168,8 +168,8 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
-	case AC_DISPLAY_BUTTON_UP_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_UP_RELEASED\n");
+	case AC_DISPLAY_BUTTON_UP_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_UP_PRESSED\n");
 		// Move up
 		setting_location_chosse -= STEP_SETTING_CHOSSE;
 		if (setting_location_chosse == SETTING_ITEM_ARRDESS_0) { 
@@ -190,8 +190,8 @@ void scr_game_setting_handle(ak_msg_t* msg) {
 		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
-	case AC_DISPLAY_BUTTON_DOWN_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_DOWN_RELEASED\n");
+	case AC_DISPLAY_BUTTON_DOWN_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_DOWN_PRESSED\n");
 		// Move down
 		setting_location_chosse += STEP_SETTING_CHOSSE;
 		if (setting_location_chosse > SETTING_ITEM_ARRDESS_4) { 

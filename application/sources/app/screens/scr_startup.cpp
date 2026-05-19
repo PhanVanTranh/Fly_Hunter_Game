@@ -59,8 +59,8 @@ void scr_startup_handle(ak_msg_t* msg) {
 		BUZZER_Sleep(settingdata.silent);
 	} break;
 
-	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_RELEASED\n");
+	case AC_DISPLAY_BUTTON_MODE_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_PRESSED\n");
 		SCREEN_TRAN(scr_menu_game_handle, &scr_menu_game);
 	} break;
 

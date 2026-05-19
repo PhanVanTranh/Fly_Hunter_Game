@@ -156,19 +156,19 @@ sequenceDiagram
 
       Note over Button,Archery: Button callback state
 
-      Note right of Button: MODE button released
+      Note right of Button: MODE button pressed
       Button->>AK:
       activate AK
       Note right of AK: AR_GAME_ARROW_SHOOT
       deactivate AK
 
-      Note right of Button: UP button released
+      Note right of Button: UP button pressed
       Button->>AK:
       activate AK
       Note right of AK: AR_GAME_ARCHERY_UP
       deactivate AK
 
-      Note right of Button: DOWN button released
+      Note right of Button: DOWN button pressed
       Button->>AK:
       activate AK
       Note right of AK: AR_GAME_ARCHERY_DOWN
@@ -470,11 +470,11 @@ In both modes, the callback only posts a signal to AK. The destination task hand
 
 | Button | Condition | Posted Signal | Destination |
 |---|---|---|---|
-| MODE Released | `ar_game_state == GAME_OFF` | `AC_DISPLAY_BUTTON_MODE_RELEASED` | `AC_TASK_DISPLAY_ID` |
+| MODE Released | `ar_game_state == GAME_OFF` | `AC_DISPLAY_BUTTON_MODE_PRESSED` | `AC_TASK_DISPLAY_ID` |
 | MODE Released | `ar_game_state != GAME_OFF` | `AR_GAME_ARROW_SHOOT` | `AR_GAME_ARROW_ID` |
-| UP Released | `ar_game_state == GAME_OFF` | `AC_DISPLAY_BUTTON_UP_RELEASED` | `AC_TASK_DISPLAY_ID` |
+| UP Released | `ar_game_state == GAME_OFF` | `AC_DISPLAY_BUTTON_UP_PRESSED` | `AC_TASK_DISPLAY_ID` |
 | UP Released | `ar_game_state != GAME_OFF` | `AR_GAME_ARCHERY_UP` | `AR_GAME_ARCHERY_ID` |
-| DOWN Released | `ar_game_state == GAME_OFF` | `AC_DISPLAY_BUTTON_DOWN_RELEASED` | `AC_TASK_DISPLAY_ID` |
+| DOWN Released | `ar_game_state == GAME_OFF` | `AC_DISPLAY_BUTTON_DOWN_PRESSED` | `AC_TASK_DISPLAY_ID` |
 | DOWN Released | `ar_game_state != GAME_OFF` | `AR_GAME_ARCHERY_DOWN` | `AR_GAME_ARCHERY_ID` |
 
 ## V. Runtime Scheduling Notes

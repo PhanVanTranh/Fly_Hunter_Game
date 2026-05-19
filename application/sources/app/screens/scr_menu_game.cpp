@@ -246,13 +246,13 @@ void scr_menu_game_handle(ak_msg_t* msg) {
 		SCREEN_TRAN(scr_idle_handle,&scr_idle);
 	} break;
 
-	case AC_DISPLAY_BUTTON_MODE_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_RELEASED\n");
+	case AC_DISPLAY_BUTTON_MODE_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_MODE_PRESSED\n");
 		screen_tran_menu();
 	} break;
 
-	case AC_DISPLAY_BUTTON_UP_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_UP_RELEASED\n");
+	case AC_DISPLAY_BUTTON_UP_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_UP_PRESSED\n");
 		if (screen_menu.location > 0) {
 			screen_menu.location--;
 		}
@@ -273,8 +273,8 @@ void scr_menu_game_handle(ak_msg_t* msg) {
 		BUZZER_PlaySound(BUZZER_SOUND_CLICK);
 	} break;
 
-	case AC_DISPLAY_BUTTON_DOWN_RELEASED: {
-		APP_DBG_SIG("AC_DISPLAY_BUTTON_DOWN_RELEASED\n");
+	case AC_DISPLAY_BUTTON_DOWN_PRESSED: {
+		APP_DBG_SIG("AC_DISPLAY_BUTTON_DOWN_PRESSED\n");
 		// 
 		if (screen_menu.location < NUMBER_MENU_ITEMS-1) {
 			screen_menu.location++;
