@@ -23,11 +23,12 @@ const task_t app_task_table[] = {
 	/*************************************************************************/
 	{AR_GAME_METEOROID_ID		,	TASK_PRI_LEVEL_4	,	ar_game_meteoroid_handle},
 	{AR_GAME_BORDER_ID			,	TASK_PRI_LEVEL_4	,	ar_game_border_handle	},
-	{AR_GAME_FLY_HUNTER_ID			,	TASK_PRI_LEVEL_4	,	ar_game_fly_hunter_handle	},
+	{AR_GAME_FLY_HUNTER_ID		,	TASK_PRI_LEVEL_4    ,   ar_game_fly_hunter_handle	},
 	{AR_GAME_ARROW_ID			,	TASK_PRI_LEVEL_4	,	ar_game_arrow_handle	},
 	{AR_GAME_BANG_ID			,	TASK_PRI_LEVEL_4	,	ar_game_bang_handle		},
 	{AR_GAME_BEE_ID             ,   TASK_PRI_LEVEL_4    ,   ar_game_bee_handle},
-	{AR_GAME_BOSS_ID            ,  TASK_PRI_LEVEL_4    ,       ar_game_boss_handle,},
+	{AR_GAME_BOSS_ID            ,   TASK_PRI_LEVEL_4    ,    ar_game_boss_handle,},
+	{AR_GAME_BOSS_BULLET_ID     ,   TASK_PRI_LEVEL_4    ,    ar_game_boss_bullet_handle},
 	{AR_GAME_SCREEN_ID			,	TASK_PRI_LEVEL_4	,	scr_fly_hunter_game_handle	},
 
 	/*************************************************************************/

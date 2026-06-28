@@ -31,6 +31,8 @@ static const buzzer_music_t buzzer_music_table[] = {
 	{BUZZER_SOUND_SUPER_MARIO,		tones_smb},
 	{BUZZER_SOUND_MERRY_CHRISTMAS,	tones_merry_christmas},
 	{BUZZER_SOUND_HIT,              tones_hit},
+	{BUZZER_SOUND_WARNING,          tones_warning},
+	{BUZZER_SOUND_BOSS_DIE,         tones_boss_die},
 	{BUZZER_SOUND_MAX,				(const Tone_TypeDef*)0}
 };
 

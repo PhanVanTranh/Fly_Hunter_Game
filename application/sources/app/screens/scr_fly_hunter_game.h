@@ -30,6 +30,7 @@
 #include "ar_game_meteoroid.h"
 #include "ar_game_bee.h"
 #include "ar_game_boss.h"
+#include "ar_game_boss_bullet.h"
 
 #define GAME_OFF		(0)
 #define GAME_PLAY		(1)

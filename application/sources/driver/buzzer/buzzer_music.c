@@ -108,6 +108,27 @@ const Tone_TypeDef tones_hit[] = {
     {0, 0}
 };
 
+const Tone_TypeDef tones_warning[] =
+{
+    {1200, 8}, 
+    {1800, 6}, 
+    {1200, 6}, 
+    {2000, 4}, 
+    {1400, 4}, 
+    {2200, 4},
+    {0,0}
+};
+
+const Tone_TypeDef tones_boss_die[] =
+{
+    {3000,4},
+    {2500,4},
+    {2000,4},
+    {1600,6},
+    {1200,8},
+    {800,10},
+    {0,0}
+};
 // "Super Mario bros." =)
 const Tone_TypeDef tones_smb[] = {
 	{2637,18}, // E7 x2

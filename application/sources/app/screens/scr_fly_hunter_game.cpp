@@ -279,6 +279,167 @@ void ar_game_border_display() {
 	}
 }
 
+void ar_game_boss_display()
+{
+    /**************************************************
+        Không hiển thị
+    **************************************************/
+
+    if(!boss.visible)
+        return;
+
+    /**************************************************
+        Animation nổ
+    **************************************************/
+
+    if(boss.state == BOSS_STATE_DYING)
+    {
+        switch(boss.explode_frame % 3)
+        {
+            case 0:
+            {
+                view_render.drawBitmap(
+                    boss.x,
+                    boss.y,
+                    bitmap_bang_I,
+                    SIZE_BITMAP_BANG_I_X,
+                    SIZE_BITMAP_BANG_I_Y,
+                    WHITE);
+            }
+            break;
+
+            case 1:
+            {
+                view_render.drawBitmap(
+                    boss.x - 2,
+                    boss.y - 2,
+                    bitmap_bang_II,
+                    SIZE_BITMAP_BANG_I_X,
+                    SIZE_BITMAP_BANG_I_Y,
+                    WHITE);
+            }
+            break;
+
+            case 2:
+            {
+                view_render.drawBitmap(
+                    boss.x - 4,
+                    boss.y - 4,
+                    bitmap_bang_III,
+                    SIZE_BITMAP_BANG_II_X,
+                    SIZE_BITMAP_BANG_II_Y,
+                    WHITE);
+            }
+            break;
+        }
+
+        return;
+    }
+
+    /**************************************************
+        Boss bị bắn -> nhấp nháy
+    **************************************************/
+
+    if(boss.hit_flash)
+    {
+        if(boss.hit_flash & 1)
+        {
+            return;
+        }
+    }
+
+    /**************************************************
+        Vẽ Boss
+    **************************************************/
+
+    view_render.drawBitmap(
+
+        boss.x + boss.shake_offset,
+
+        boss.y,
+
+        bitmap_fly_boss,
+
+        SIZE_BITMAP_BOSS_X,
+
+        SIZE_BITMAP_BOSS_Y,
+
+        WHITE);
+
+    /**************************************************
+        HP Bar
+    **************************************************/
+
+    uint8_t hp_y;
+
+    if(boss.y < 5)
+    {
+        hp_y = boss.y + SIZE_BITMAP_BOSS_Y + 2;
+    }
+    else
+    {
+        hp_y = boss.y - 4;
+    }
+
+    view_render.drawRect(
+
+        boss.x + boss.shake_offset,
+
+        hp_y,
+
+        24,
+
+        3,
+
+        WHITE);
+
+    uint8_t hp_width =
+        (boss.display_hp * 22) / boss.hp_max;
+
+    view_render.fillRect(
+
+        boss.x + boss.shake_offset + 1,
+
+        hp_y + 1,
+
+        hp_width,
+
+        1,
+
+        WHITE);
+
+    /**************************************************
+        Hiển thị số HP
+    **************************************************/
+
+// Nếu OLED còn chỗ thì bỏ comment
+
+/*
+    view_render.setTextSize(1);
+
+    view_render.setCursor(
+        boss.x,
+        hp_y - 8);
+
+    view_render.print(boss.hp);
+*/
+}
+
+void ar_game_boss_bullet_display()
+{
+    for(uint8_t i=0;i<NUM_BOSS_BULLET;i++)
+    {
+        if(boss_bullet[i].visible == BLACK)
+            continue;
+
+        view_render.fillCircle(
+            boss_bullet[i].x,
+            boss_bullet[i].y,
+            2,
+            WHITE);
+    }
+}
+
 static void view_scr_fly_hunter_game();
 
 view_dynamic_t dyn_view_item_fly_hunter_game = {
@@ -306,7 +467,8 @@ void view_scr_fly_hunter_game() {
 		ar_game_bang_display();
 		ar_game_boss_display();
 		ar_game_border_display();
-		
+		ar_game_boss_bullet_display();
+
 		if(game_state == GAME_STATE_WARNING)
 		{
 			if((warning_timer / 5) % 2)
@@ -316,11 +478,11 @@ void view_scr_fly_hunter_game() {
 				view_render.setTextColor(WHITE);
 
 				view_render.setTextSize(2);
-				view_render.setCursor(28,15);
+				view_render.setCursor(30,15);
 				view_render.print("WARNING");
 
 				view_render.setTextSize(1);
-				view_render.setCursor(26,38);
+				view_render.setCursor(30,38);
 				view_render.print("BOSS INCOMING");
 			}
 		}
@@ -383,6 +545,7 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		task_post_pure_msg(AR_GAME_BORDER_ID, 	 	AR_GAME_BORDER_SETUP);
 		task_post_pure_msg(AR_GAME_BEE_ID,           AR_GAME_BEE_SETUP);
 		task_post_pure_msg(AR_GAME_BOSS_ID,         AR_GAME_BOSS_SETUP);
+		task_post_pure_msg(AR_GAME_BOSS_BULLET_ID,  AR_GAME_BOSS_BULLET_SETUP);
 		// Set state 'GAME_PLAY' & remove idle screen timer
 		ar_game_state = GAME_PLAY;
 		game_state = GAME_STATE_NORMAL;
@@ -412,19 +575,22 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		task_post_pure_msg(AR_GAME_BORDER_ID, 		AR_GAME_CHECK_GAME_OVER);
 		task_post_pure_msg(AR_GAME_BEE_ID,           AR_GAME_BEE_RUN);
 		task_post_pure_msg(AR_GAME_BEE_ID,           AR_GAME_BEE_DETONATOR);
-		task_post_pure_msg(AR_GAME_BOSS_ID,    AR_GAME_BOSS_RUN);
-		task_post_pure_msg(AR_GAME_BOSS_ID,   AR_GAME_BOSS_DETONATOR);
+		task_post_pure_msg(AR_GAME_BOSS_ID,         AR_GAME_BOSS_RUN);
+		task_post_pure_msg(AR_GAME_BOSS_ID,         AR_GAME_BOSS_DETONATOR);
+		task_post_pure_msg(AR_GAME_BOSS_BULLET_ID,  AR_GAME_BOSS_BULLET_RUN);
+		
 
 		if(game_state == GAME_STATE_NORMAL &&
 		ar_game_score >= next_boss_score)
 		{
 			game_state = GAME_STATE_WARNING;
-
 			warning_timer = 40;
+			BUZZER_PlaySound(BUZZER_SOUND_WARNING);
 		}
 
 		if(game_state == GAME_STATE_WARNING)
 		{
+			//BUZZER_PlaySound(BUZZER_SOUND_WARNING);
 			if(warning_timer > 0)
 			{
 				warning_timer--;
@@ -454,6 +620,7 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		task_post_pure_msg(AR_GAME_BORDER_ID, 		AR_GAME_BORDER_RESET);
 		task_post_pure_msg(AR_GAME_BEE_ID,          AR_GAME_BEE_RESET);
 		task_post_pure_msg(AR_GAME_BOSS_ID,			AR_GAME_BOSS_RESET);
+		task_post_pure_msg(AR_GAME_BOSS_BULLET_ID,  AR_GAME_BOSS_BULLET_RESET);
 		// Reset text animation index
 		ar_game_over_text_index = 0;
 
