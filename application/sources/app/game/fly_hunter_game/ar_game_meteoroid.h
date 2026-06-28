@@ -48,5 +48,6 @@ typedef struct {
 } ar_game_meteoroid_t;
 
 extern ar_game_meteoroid_t meteoroid[NUM_METEOROIDS];
-
+void meteoroid_adjust_position(uint8_t index);
+void meteoroid_random_position(uint8_t index);
 #endif //__AR_GAME_METEOROID_H__

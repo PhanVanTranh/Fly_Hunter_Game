@@ -11,6 +11,12 @@ const Tone_TypeDef tones_bang[] = {
 	{   0, 0}
 };
 
+const Tone_TypeDef tones_bee[] = {
+    {2500, 2},
+    {1200, 4},
+    {0, 0}
+};
+
 const Tone_TypeDef tones_usb_connected[] = {
 	{ 400, 4},
 	{   0, 1},
@@ -93,6 +99,13 @@ const Tone_TypeDef tones_lowscore[] = {
 	{ 523, 25},
 	{ 587, 35},
 	{   0,  0}
+};
+
+//custom - TP
+const Tone_TypeDef tones_hit[] = {
+    {1800, 2},
+    {1000, 4},
+    {0, 0}
 };
 
 // "Super Mario bros." =)

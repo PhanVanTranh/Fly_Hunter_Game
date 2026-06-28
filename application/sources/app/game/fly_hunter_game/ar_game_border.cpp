@@ -9,6 +9,8 @@ uint32_t ar_game_score					 = 10;
 uint8_t player_life = 3;
 static uint32_t ar_game_next_level_score = AR_GAME_LEVEL_UP_SCORE;
 
+uint8_t border_flash = 0;  // Flash game border
+
 void ar_game_border_handle(ak_msg_t *msg) {
 	switch (msg->sig) {
 	case AR_GAME_BORDER_SETUP: {
@@ -47,6 +49,18 @@ void ar_game_border_handle(ak_msg_t *msg) {
 			{
 				if (player_life > 0) {
 					player_life--;
+					BUZZER_PlaySound(BUZZER_SOUND_HIT);
+
+					task_post_pure_msg(
+					AR_GAME_SCREEN_ID,
+					AR_GAME_SCREEN_FLASH
+					);
+
+					if(player_life == 0) {
+						task_post_pure_msg(AR_GAME_SCREEN_ID, AR_GAME_RESET);
+					}
+
+					
 				}
 
 				if (player_life == 0) {
@@ -67,6 +81,8 @@ void ar_game_border_handle(ak_msg_t *msg) {
 					else {
 						meteoroid[i].y = RANDOM_METEOROID_Y_BOTTOM();
 					}
+					
+					//meteoroid_adjust_position(i);
 				}
 
 				break;

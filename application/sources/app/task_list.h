@@ -31,6 +31,8 @@ enum {
 	AR_GAME_FLY_HUNTER_ID,
 	AR_GAME_ARROW_ID,
 	AR_GAME_BANG_ID,
+	AR_GAME_BEE_ID,
+	AR_GAME_BOSS_ID,
 	AR_GAME_SCREEN_ID,
 
 	/* LINK */
@@ -77,6 +79,8 @@ extern void ar_game_meteoroid_handle(ak_msg_t*);
 extern void ar_game_border_handle(ak_msg_t*);
 extern void ar_game_bang_handle(ak_msg_t*);
 extern void scr_fly_hunter_game_handle(ak_msg_t*);
+extern void ar_game_bee_handle(ak_msg_t*);
+extern void ar_game_boss_handle(ak_msg_t*);
 
 /* LINK TASK */
 extern void task_link_phy(ak_msg_t*);

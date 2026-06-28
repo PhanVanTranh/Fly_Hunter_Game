@@ -28,10 +28,28 @@
 #include "ar_game_bang.h"
 #include "ar_game_border.h"
 #include "ar_game_meteoroid.h"
+#include "ar_game_bee.h"
+#include "ar_game_boss.h"
 
 #define GAME_OFF		(0)
 #define GAME_PLAY		(1)
 #define GAME_OVER		(2)
+
+typedef enum
+{
+    GAME_STATE_NORMAL = 0,
+
+    GAME_STATE_WARNING,
+
+    GAME_STATE_BOSS,
+
+    GAME_STATE_BOSS_DIE
+
+}game_state_t;
+
+extern game_state_t game_state;
+extern uint16_t warning_timer;
+extern uint16_t next_boss_score;
 
 extern uint8_t ar_game_state;
 extern ar_game_setting_t settingsetup;

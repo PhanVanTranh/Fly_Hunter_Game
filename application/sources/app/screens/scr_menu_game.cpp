@@ -43,7 +43,7 @@ struct menu_items{
 
 // Menu items name
 static char menu_items_name[NUMBER_MENU_ITEMS][20] = {
-	"  fly_hunter Game  ",		// item 1
+	" Fly Hunter Game  ",		// item 1
 	"   Setting        ",		// item 2
 	"   Charts         ",		// item 3
 	"   Exit           ",		// item 4

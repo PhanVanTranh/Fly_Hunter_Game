@@ -4,6 +4,7 @@
 
 #include "screens.h"
 
+
 /*****************************************************************************/
 /* Variable Declaration - fly_hunter game screen */
 /*****************************************************************************/
@@ -11,9 +12,16 @@
 #define AR_GAME_HIGHSCORE_SCORE				(300)
 #define AR_GAME_ARRAY_SIZE(arr)				(sizeof(arr) / sizeof((arr)[0]))
 
+extern uint8_t border_flash;
 uint8_t ar_game_state; 
 ar_game_setting_t settingsetup;
 static uint8_t ar_game_over_text_index = 0;
+
+game_state_t game_state = GAME_STATE_NORMAL;
+
+uint16_t warning_timer = 0;
+
+uint16_t next_boss_score = 1000;
 
 static const char* ar_game_over_text = " Too Bad!";
 static const char* const ar_game_praise_text[] = {
@@ -137,6 +145,67 @@ void ar_game_meteoroid_display() {
 	}
 }
 
+void ar_game_bee_display() {
+
+    for(uint8_t i = 0; i < NUM_BEE; i++) {
+
+        if(bee[i].visible == WHITE) {
+
+            switch(bee[i].action_image) {
+
+            case AR_GAME_BEE_ACTION_IMAGE_1:
+
+                view_render.drawBitmap(
+                    bee[i].x,
+                    bee[i].y,
+                    bitmap_bee_I,
+                    SIZE_BITMAP_BEE_X,
+                    SIZE_BITMAP_BEE_Y,
+                    WHITE);
+
+                break;
+
+            case AR_GAME_BEE_ACTION_IMAGE_2:
+
+                view_render.drawBitmap(
+                    bee[i].x,
+                    bee[i].y,
+                    bitmap_bee_II,
+                    SIZE_BITMAP_BEE_X,
+                    SIZE_BITMAP_BEE_Y,
+                    WHITE);
+
+                break;
+
+            case AR_GAME_BEE_ACTION_IMAGE_3:
+
+                view_render.drawBitmap(
+                    bee[i].x,
+                    bee[i].y,
+                    bitmap_bee_III,
+                    SIZE_BITMAP_BEE_X,
+                    SIZE_BITMAP_BEE_Y,
+                    WHITE);
+
+                break;
+            }
+        }
+    }
+	for(uint8_t i=0;i<NUM_BEE;i++)
+	{
+		if(bee[i].show_minus20 &&
+			(bee[i].minus20_timer % 2 == 0))
+			{
+				view_render.setCursor(
+					bee[i].minus20_x,
+					bee[i].minus20_y);
+
+				view_render.print("-20");
+			}
+	}
+}
+
+
 void ar_game_bang_display() {
 	for (uint8_t i = 0; i < NUM_BANG; i++) {
 		if (bang[i].visible == WHITE) {
@@ -170,15 +239,42 @@ void ar_game_bang_display() {
 
 void ar_game_border_display() {
 	if (border.visible == WHITE) {
-		view_render.drawFastVLine(	border.x, \
-									AXIS_Y_BORDER_ON, \
-									AXIS_Y_BORDER_UNDER, \
-									WHITE);
-		for (uint8_t i = 0; i < NUM_METEOROIDS; i++) {
-			view_render.fillCircle(	border.x, \
-									meteoroid[i].y + 5, \
-									1, \
-									WHITE);
+		if (border_flash > 0) {
+
+			if (border_flash % 2) {
+
+				view_render.drawFastVLine(
+					border.x,
+					AXIS_Y_BORDER_ON,
+					AXIS_Y_BORDER_UNDER,
+					WHITE);
+
+				for (uint8_t i = 0; i < NUM_METEOROIDS; i++) {
+					view_render.fillCircle(
+						border.x,
+						meteoroid[i].y + 5,
+						1,
+						WHITE);
+				}
+			}
+
+			border_flash--;
+		}
+		else {
+
+			view_render.drawFastVLine(
+				border.x,
+				AXIS_Y_BORDER_ON,
+				AXIS_Y_BORDER_UNDER,
+				WHITE);
+
+			for (uint8_t i = 0; i < NUM_METEOROIDS; i++) {
+				view_render.fillCircle(
+					border.x,
+					meteoroid[i].y + 5,
+					1,
+					WHITE);
+			}
 		}
 	}
 }
@@ -206,8 +302,37 @@ void view_scr_fly_hunter_game() {
 		ar_game_fly_hunter_display();
 		ar_game_arrow_display();
 		ar_game_meteoroid_display();
+		ar_game_bee_display();
 		ar_game_bang_display();
+		ar_game_boss_display();
 		ar_game_border_display();
+		
+		if(game_state == GAME_STATE_WARNING)
+		{
+			if((warning_timer / 5) % 2)
+			{
+				BUZZER_PlaySound(BUZZER_SOUND_3BEEP);
+				
+				view_render.setTextColor(WHITE);
+
+				view_render.setTextSize(2);
+				view_render.setCursor(28,15);
+				view_render.print("WARNING");
+
+				view_render.setTextSize(1);
+				view_render.setCursor(26,38);
+				view_render.print("BOSS INCOMING");
+			}
+		}
+
+		if(border_flash) {
+			view_render.drawRect(0,0,128,64,WHITE);
+			view_render.drawRect(1,1,126,62,WHITE);
+			view_render.drawRect(2,2,124,60,WHITE);
+			view_render.drawRect(3,3,122,58,WHITE);
+
+			border_flash--;
+		}
 	}
 	else if (ar_game_state == GAME_OVER) {
 		view_render.clear();
@@ -256,9 +381,16 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		task_post_pure_msg(AR_GAME_METEOROID_ID, 	AR_GAME_METEOROID_SETUP);
 		task_post_pure_msg(AR_GAME_BANG_ID, 	 	AR_GAME_BANG_SETUP);
 		task_post_pure_msg(AR_GAME_BORDER_ID, 	 	AR_GAME_BORDER_SETUP);
-
+		task_post_pure_msg(AR_GAME_BEE_ID,           AR_GAME_BEE_SETUP);
+		task_post_pure_msg(AR_GAME_BOSS_ID,         AR_GAME_BOSS_SETUP);
 		// Set state 'GAME_PLAY' & remove idle screen timer
 		ar_game_state = GAME_PLAY;
+		game_state = GAME_STATE_NORMAL;
+
+		warning_timer = 0;
+
+		next_boss_score = 1000;
+
 		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE);
 
 		// Setup timer
@@ -278,6 +410,34 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		task_post_pure_msg(AR_GAME_BANG_ID, 		AR_GAME_BANG_UPDATE);
 		task_post_pure_msg(AR_GAME_BORDER_ID, 		AR_GAME_LEVEL_UP);
 		task_post_pure_msg(AR_GAME_BORDER_ID, 		AR_GAME_CHECK_GAME_OVER);
+		task_post_pure_msg(AR_GAME_BEE_ID,           AR_GAME_BEE_RUN);
+		task_post_pure_msg(AR_GAME_BEE_ID,           AR_GAME_BEE_DETONATOR);
+		task_post_pure_msg(AR_GAME_BOSS_ID,    AR_GAME_BOSS_RUN);
+		task_post_pure_msg(AR_GAME_BOSS_ID,   AR_GAME_BOSS_DETONATOR);
+
+		if(game_state == GAME_STATE_NORMAL &&
+		ar_game_score >= next_boss_score)
+		{
+			game_state = GAME_STATE_WARNING;
+
+			warning_timer = 40;
+		}
+
+		if(game_state == GAME_STATE_WARNING)
+		{
+			if(warning_timer > 0)
+			{
+				warning_timer--;
+			}
+			else
+			{
+				game_state = GAME_STATE_BOSS;
+				task_post_pure_msg(
+       			 AR_GAME_BOSS_ID,
+        		AR_GAME_BOSS_SPAWN);
+			}
+		}
+
 	} break;
 
 	case AR_GAME_RESET: {
@@ -292,7 +452,8 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		task_post_pure_msg(AR_GAME_METEOROID_ID,	AR_GAME_METEOROID_RESET);
 		task_post_pure_msg(AR_GAME_BANG_ID, 		AR_GAME_BANG_RESET);
 		task_post_pure_msg(AR_GAME_BORDER_ID, 		AR_GAME_BORDER_RESET);
-
+		task_post_pure_msg(AR_GAME_BEE_ID,          AR_GAME_BEE_RESET);
+		task_post_pure_msg(AR_GAME_BOSS_ID,			AR_GAME_BOSS_RESET);
 		// Reset text animation index
 		ar_game_over_text_index = 0;
 
@@ -356,7 +517,12 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		SCREEN_TRAN(scr_game_over_handle, &scr_game_over);
 	} break;
 
+	case AR_GAME_SCREEN_FLASH: {
+		border_flash = 6;
+	} break;
+
 	default:
 		break;
 	}
 }
+

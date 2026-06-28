@@ -166,6 +166,7 @@ enum {
 	AR_GAME_RESET,
 	AR_GAME_OVER_TEXT_ANIM_TICK,
 	AR_GAME_EXIT_GAME,
+	AR_GAME_SCREEN_FLASH,
 };
 
 /*****************************************************************************/
@@ -231,6 +232,29 @@ enum {
 	AR_GAME_METEOROID_RUN,
 	AR_GAME_METEOROID_DETONATOR,
 	AR_GAME_METEOROID_RESET,
+};
+
+/*****************************************************************************/
+/* fly hunter game 'BEE' task define
+ */
+/*****************************************************************************/
+enum {
+    AR_GAME_BEE_SETUP = AR_GAME_DEFINE_SIG,
+    AR_GAME_BEE_RUN,
+    AR_GAME_BEE_DETONATOR,
+    AR_GAME_BEE_RESET,
+};
+
+/*****************************************************************************/
+/* fly hunter game 'BOSS' task define
+ */
+/*****************************************************************************/
+enum {
+    AR_GAME_BOSS_SETUP = AR_GAME_DEFINE_SIG,
+    AR_GAME_BOSS_RUN,
+	AR_GAME_BOSS_SPAWN,
+    AR_GAME_BOSS_DETONATOR,
+    AR_GAME_BOSS_RESET,
 };
 
 /*****************************************************************************/

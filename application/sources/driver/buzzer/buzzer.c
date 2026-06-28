@@ -18,6 +18,7 @@ typedef struct {
 static const buzzer_music_t buzzer_music_table[] = {
 	{BUZZER_SOUND_CLICK,			tones_click},
 	{BUZZER_SOUND_BANG,				tones_bang},
+	{BUZZER_SOUND_BEE,              tones_bee},
 	{BUZZER_SOUND_USB_CONNECTED,	tones_usb_connected},
 	{BUZZER_SOUND_USB_DISCONNECTED,	tones_usb_disconnected},
 	{BUZZER_SOUND_LETS_GO,			tones_lets_go},
@@ -29,6 +30,7 @@ static const buzzer_music_t buzzer_music_table[] = {
 	{BUZZER_SOUND_LOWSCORE,			tones_lowscore},
 	{BUZZER_SOUND_SUPER_MARIO,		tones_smb},
 	{BUZZER_SOUND_MERRY_CHRISTMAS,	tones_merry_christmas},
+	{BUZZER_SOUND_HIT,              tones_hit},
 	{BUZZER_SOUND_MAX,				(const Tone_TypeDef*)0}
 };
 
