@@ -527,7 +527,7 @@ void ar_game_boss_display()
 
         boss.y,
 
-        bitmap_boss_fly,
+        bitmap_fly_boss,
 
         SIZE_BITMAP_BOSS_X,
 

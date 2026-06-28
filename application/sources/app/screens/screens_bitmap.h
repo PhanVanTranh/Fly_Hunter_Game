@@ -10,7 +10,7 @@ extern const unsigned char PROGMEM bitmap_fly_hunter_II [];
 extern const unsigned char PROGMEM bitmap_fly_I[];
 extern const unsigned char PROGMEM bitmap_fly_II[];
 extern const unsigned char PROGMEM bitmap_fly_III[];
-extern const unsigned char PROGMEM bitmap_boss_fly[];
+extern const unsigned char PROGMEM bitmap_fly_boss[];
 extern const unsigned char PROGMEM bitmap_bee_I[];
 extern const unsigned char PROGMEM bitmap_bee_II[];
 extern const unsigned char PROGMEM bitmap_bee_III[];
