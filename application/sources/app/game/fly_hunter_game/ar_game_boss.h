@@ -64,6 +64,9 @@ typedef struct
     uint8_t explode_frame;
     uint8_t explode_timer;
 
+    int8_t move_dir;
+    uint8_t move_range;
+
 } ar_game_boss_t;
 
 
@@ -86,8 +89,6 @@ extern ar_game_boss_t boss;
 
 void ar_game_boss_handle(ak_msg_t *msg);
 
-void boss_spawn(void);
-
-void boss_reset(void);
 void ar_game_boss_display(void);
 #endif
+    

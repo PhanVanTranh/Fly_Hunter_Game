@@ -67,6 +67,9 @@ void ar_game_boss_handle(ak_msg_t *msg)
         boss.explode_frame = 0;
         boss.explode_timer = 0;
 
+        boss.move_dir = 1;
+        boss.move_range = 0;
+
         boss.x = 128;
         boss.y = 15;
 
@@ -104,12 +107,16 @@ void ar_game_boss_handle(ak_msg_t *msg)
         boss.explode_frame = 0;
         boss.explode_timer = 0;
 
+        boss.move_dir = 1;
+        boss.move_range = 0;
         /* Spawn */
 
         boss.x = 128;
         boss.y = 15;
 
         boss_move_tick = 0;
+        task_post_pure_msg( AR_GAME_BOSS_BULLET_ID, AR_GAME_BOSS_BULLET_SETUP);
+        timer_set( AR_GAME_BOSS_BULLET_ID, AR_GAME_BOSS_BULLET_FIRE, 700, TIMER_ONE_SHOT);
 
         /**************************************************
             Xóa toàn bộ Fly
@@ -237,7 +244,19 @@ void ar_game_boss_handle(ak_msg_t *msg)
             boss_move_tick = 0;
 
             boss.x--;
+            
+            boss.y += boss.move_dir;
+
+            boss.move_range++;
+
+            if(boss.move_range >= 12)
+            {
+                boss.move_range = 0;
+                boss.move_dir = -boss.move_dir;
+            }
         }
+
+
 
         /**************************************************
             Boss rung khi trúng đạn
@@ -281,6 +300,7 @@ void ar_game_boss_handle(ak_msg_t *msg)
 
         if(boss.x <= AXIS_X_BORDER)
         {
+            task_post_pure_msg(AR_GAME_BOSS_BULLET_ID, AR_GAME_BOSS_BULLET_RESET);
             boss.visible = BLACK;
 
             boss.state = BOSS_STATE_HIDE;
@@ -379,7 +399,11 @@ void ar_game_boss_handle(ak_msg_t *msg)
 
                     boss.shake_timer = 8;
 
-                    BUZZER_PlaySound(BUZZER_SOUND_BANG);
+                    if(boss.hp > 0)
+                    {
+                        BUZZER_PlaySound(BUZZER_SOUND_BANG);
+                    }
+                    
                 }
 
                 /********************************************
@@ -389,6 +413,8 @@ void ar_game_boss_handle(ak_msg_t *msg)
                 if(boss.hp == 0)
                 {
                     boss.state = BOSS_STATE_DYING;
+
+                    task_post_pure_msg( AR_GAME_BOSS_BULLET_ID, AR_GAME_BOSS_BULLET_RESET);
 
                     boss.explode_frame = 0;
 
@@ -400,7 +426,7 @@ void ar_game_boss_handle(ak_msg_t *msg)
 
                     boss.display_hp = 0;
 
-                    BUZZER_PlaySound(BUZZER_SOUND_BANG);
+                    BUZZER_PlaySound(BUZZER_SOUND_BOSS_DIE);
                 }
 
                 break;
@@ -437,6 +463,8 @@ void ar_game_boss_handle(ak_msg_t *msg)
         boss.y = 15;
 
         boss_move_tick = 0;
+
+        task_post_pure_msg( AR_GAME_BOSS_BULLET_ID, AR_GAME_BOSS_BULLET_RESET);
     }
     break;
     default:
@@ -444,152 +472,3 @@ void ar_game_boss_handle(ak_msg_t *msg)
     }
 }
 
-/************************************************************/
-/* Boss Display                                             */
-/************************************************************/
-
-void ar_game_boss_display()
-{
-    /**************************************************
-        Không hiển thị
-    **************************************************/
-
-    if(!boss.visible)
-        return;
-
-    /**************************************************
-        Animation nổ
-    **************************************************/
-
-    if(boss.state == BOSS_STATE_DYING)
-    {
-        switch(boss.explode_frame % 3)
-        {
-            case 0:
-            {
-                view_render.drawBitmap(
-                    boss.x,
-                    boss.y,
-                    bitmap_bang_I,
-                    SIZE_BITMAP_BANG_I_X,
-                    SIZE_BITMAP_BANG_I_Y,
-                    WHITE);
-            }
-            break;
-
-            case 1:
-            {
-                view_render.drawBitmap(
-                    boss.x - 2,
-                    boss.y - 2,
-                    bitmap_bang_II,
-                    SIZE_BITMAP_BANG_I_X,
-                    SIZE_BITMAP_BANG_I_Y,
-                    WHITE);
-            }
-            break;
-
-            case 2:
-            {
-                view_render.drawBitmap(
-                    boss.x - 4,
-                    boss.y - 4,
-                    bitmap_bang_III,
-                    SIZE_BITMAP_BANG_II_X,
-                    SIZE_BITMAP_BANG_II_Y,
-                    WHITE);
-            }
-            break;
-        }
-
-        return;
-    }
-
-    /**************************************************
-        Boss bị bắn -> nhấp nháy
-    **************************************************/
-
-    if(boss.hit_flash)
-    {
-        if(boss.hit_flash & 1)
-        {
-            return;
-        }
-    }
-
-    /**************************************************
-        Vẽ Boss
-    **************************************************/
-
-    view_render.drawBitmap(
-
-        boss.x + boss.shake_offset,
-
-        boss.y,
-
-        bitmap_fly_boss,
-
-        SIZE_BITMAP_BOSS_X,
-
-        SIZE_BITMAP_BOSS_Y,
-
-        WHITE);
-
-    /**************************************************
-        HP Bar
-    **************************************************/
-
-    uint8_t hp_y;
-
-    if(boss.y < 5)
-    {
-        hp_y = boss.y + SIZE_BITMAP_BOSS_Y + 2;
-    }
-    else
-    {
-        hp_y = boss.y - 4;
-    }
-
-    view_render.drawRect(
-
-        boss.x + boss.shake_offset,
-
-        hp_y,
-
-        24,
-
-        3,
-
-        WHITE);
-
-    uint8_t hp_width =
-        (boss.display_hp * 22) / boss.hp_max;
-
-    view_render.fillRect(
-
-        boss.x + boss.shake_offset + 1,
-
-        hp_y + 1,
-
-        hp_width,
-
-        1,
-
-        WHITE);
-
-    /**************************************************
-        Hiển thị số HP
-    **************************************************/
-
-// Nếu OLED còn chỗ thì bỏ comment
-
-/*
-    view_render.setTextSize(1);
-
-    view_render.setCursor(
-        boss.x,
-        hp_y - 8);
-
-    view_render.print(boss.hp);
-*/
-}
