@@ -129,6 +129,18 @@ const Tone_TypeDef tones_boss_die[] =
     {800,10},
     {0,0}
 };
+
+const Tone_TypeDef tones_startup_game[] =
+{
+    {1047, 6}, 
+    {1318, 6}, 
+    {1568, 6}, 
+    {2093, 7}, 
+    {1568, 5}, 
+    {2093, 12}, 
+    {0, 0}
+};
+
 // "Super Mario bros." =)
 const Tone_TypeDef tones_smb[] = {
 	{2637,18}, // E7 x2

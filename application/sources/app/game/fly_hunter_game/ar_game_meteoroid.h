@@ -16,18 +16,10 @@
 #include "buzzer.h"
 #include "scr_fly_hunter_game.h"
 
-// #define NUM_METEOROIDS              (2)
-// #define SIZE_BITMAP_METEOROIDS_X    (40)
-// #define SIZE_BITMAP_METEOROIDS_Y    (30)
 
 #define NUM_METEOROIDS              (3)
 #define SIZE_BITMAP_METEOROIDS_X    (25)
 #define SIZE_BITMAP_METEOROIDS_Y    (20)
-
-// #define AXIS_Y_METEOROID_START   (2)
-// #define AXIS_Y_METEOROID_STEP    (12)
-
-//#define RANDOM_METEOROID_Y() (rand() % 34)
 
 #define RANDOM_METEOROID_X() ((rand() % 39) + 130)
 #define RANDOM_METEOROID_Y_TOP()      (rand() % 4)          // 0~3

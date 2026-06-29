@@ -202,6 +202,13 @@ void ar_game_boss_handle(ak_msg_t *msg)
 
                 ar_game_score += BOSS_SCORE_REWARD;
 
+                if(player_life < PLAYER_MAX_LIFE)
+                {
+                    player_life++;
+
+                    BUZZER_PlaySound(BUZZER_SOUND_HIGHSCORE);
+                }
+
                 next_boss_score += NEXT_BOSS_SCORE_STEP;
 
                 boss_hp += BOSS_HP_INCREMENT;
@@ -308,7 +315,13 @@ void ar_game_boss_handle(ak_msg_t *msg)
             if(player_life > 0)
             {
                 player_life--;
-            }
+
+                BUZZER_PlaySound(BUZZER_SOUND_HIT);
+
+                task_post_pure_msg(
+                    AR_GAME_SCREEN_ID,
+                    AR_GAME_SCREEN_FLASH);
+                    }
 
             if(player_life == 0)
             {

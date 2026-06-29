@@ -32,7 +32,8 @@ typedef enum {
 	BUZZER_SOUND_HIT,
 	BUZZER_SOUND_MAX,
 	BUZZER_SOUND_WARNING,
-	BUZZER_SOUND_BOSS_DIE
+	BUZZER_SOUND_BOSS_DIE,
+	BUZZER_SOUND_STARTUP_GAME
 } buzzer_sound_t;
 
 extern const Tone_TypeDef tones_click[];
@@ -52,6 +53,8 @@ extern const Tone_TypeDef tones_merry_christmas[];
 extern const Tone_TypeDef tones_hit[];
 extern const Tone_TypeDef tones_warning[];
 extern const Tone_TypeDef tones_boss_die[];
+extern const Tone_TypeDef tones_startup_game[];
+
 #ifdef __cplusplus
 }
 #endif

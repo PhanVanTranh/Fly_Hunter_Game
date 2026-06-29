@@ -19,6 +19,8 @@
 
 #include "screens.h"
 
+#define AC_DISPLAY_SHOW_GAME_LOGO     (AC_DISPLAY_SHOW_STARTUP_LOGO + 1)
+
 extern view_dynamic_t dyn_view_startup;
 extern view_screen_t scr_startup;
 extern void scr_startup_handle(ak_msg_t* msg);

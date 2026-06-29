@@ -20,6 +20,7 @@
 #define AXIS_Y_BORDER_ON        (0)
 #define AXIS_Y_BORDER_UNDER     (54)
 
+#define PLAYER_MAX_LIFE          (3)
 enum {
     AR_GAME_BORDER_ACTION_IMAGE_1 = 1,
     AR_GAME_BORDER_ACTION_IMAGE_END

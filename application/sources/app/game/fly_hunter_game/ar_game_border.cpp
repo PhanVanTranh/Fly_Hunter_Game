@@ -6,7 +6,7 @@
 
 ar_game_border_t border;
 uint32_t ar_game_score					 = 10;
-uint8_t player_life = 3;
+uint8_t player_life = PLAYER_MAX_LIFE;
 static uint32_t ar_game_next_level_score = AR_GAME_LEVEL_UP_SCORE;
 
 uint8_t border_flash = 0;  // Flash game border
@@ -20,7 +20,7 @@ void ar_game_border_handle(ak_msg_t *msg) {
 		border.action_image = AR_GAME_BORDER_ACTION_IMAGE_1;
 
 		//ar_game_score = 0;
-		player_life = 3;
+		player_life = PLAYER_MAX_LIFE;
 	} break;
 
 	case AR_GAME_LEVEL_UP: {

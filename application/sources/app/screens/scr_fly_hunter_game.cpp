@@ -76,7 +76,7 @@ void ar_game_frame_display() {
 	view_render.print(" Score:");
 	view_render.print(ar_game_score);
 	view_render.drawLine(0, LCD_HEIGHT, 	LCD_WIDTH, LCD_HEIGHT,		WHITE);
-	view_render.drawLine(0, LCD_HEIGHT-10, 	LCD_WIDTH, LCD_HEIGHT-10,	WHITE);
+	view_render.drawLine(0, LCD_HEIGHT-12, 	LCD_WIDTH, LCD_HEIGHT-12,	WHITE);
 	view_render.drawRect(0, 0, 128, 64, 1);
 }
 
@@ -271,7 +271,7 @@ void ar_game_border_display() {
 			for (uint8_t i = 0; i < NUM_METEOROIDS; i++) {
 				view_render.fillCircle(
 					border.x,
-					meteoroid[i].y + 5,
+					meteoroid[i].y + 3,
 					1,
 					WHITE);
 			}
@@ -281,16 +281,8 @@ void ar_game_border_display() {
 
 void ar_game_boss_display()
 {
-    /**************************************************
-        Không hiển thị
-    **************************************************/
-
     if(!boss.visible)
         return;
-
-    /**************************************************
-        Animation nổ
-    **************************************************/
 
     if(boss.state == BOSS_STATE_DYING)
     {
@@ -336,10 +328,6 @@ void ar_game_boss_display()
         return;
     }
 
-    /**************************************************
-        Boss bị bắn -> nhấp nháy
-    **************************************************/
-
     if(boss.hit_flash)
     {
         if(boss.hit_flash & 1)
@@ -349,7 +337,7 @@ void ar_game_boss_display()
     }
 
     /**************************************************
-        Vẽ Boss
+        Draw Boss
     **************************************************/
 
     view_render.drawBitmap(
