@@ -21,7 +21,7 @@ game_state_t game_state = GAME_STATE_NORMAL;
 
 uint16_t warning_timer = 0;
 
-uint16_t next_boss_score = 1000;
+uint16_t next_boss_score = 500;
 
 static const char* ar_game_over_text = " Too Bad!";
 static const char* const ar_game_praise_text[] = {
@@ -42,13 +42,6 @@ static const char* const ar_game_blame_text[] = {
 
 static const char* ar_game_random_text(const char* const* text_list, uint8_t text_count) {
 	return text_list[rand() % text_count];
-}
-
-static void ar_game_print_text_partial(const char* text, uint8_t max_chars) {
-	if (text == NULL) return;
-	for (uint8_t i = 0; i < max_chars && text[i] != '\0'; i++) {
-		view_render.print(text[i]);
-	}
 }
 
 /*****************************************************************************/
@@ -114,91 +107,91 @@ void ar_game_arrow_display() {
 	}
 }
 
-void ar_game_meteoroid_display() {
-	for (uint8_t i = 0; i < NUM_METEOROIDS; i++) {
-		if (meteoroid[i].visible == WHITE) {
-			if (meteoroid[i].action_image == AR_GAME_METEOROID_ACTION_IMAGE_1) {
-				view_render.drawBitmap(	meteoroid[i].x, \
-										meteoroid[i].y, \
+void ar_game_fly_display() {
+	for (uint8_t i = 0; i < NUM_FLYs; i++) {
+		if (fly[i].visible == WHITE) {
+			if (fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_1) {
+				view_render.drawBitmap(	fly[i].x, \
+										fly[i].y, \
 										bitmap_fly_I, \
-										SIZE_BITMAP_METEOROIDS_X, \
-										SIZE_BITMAP_METEOROIDS_Y, \
-				 						WHITE);
+										SIZE_BITMAP_FLYs_X, \
+										SIZE_BITMAP_FLYs_Y, \
+				 					WHITE);
 			}
-			else if (meteoroid[i].action_image == AR_GAME_METEOROID_ACTION_IMAGE_2) {
-				view_render.drawBitmap(	meteoroid[i].x, \
-										meteoroid[i].y, \
+			else if (fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_2) {
+				view_render.drawBitmap(	fly[i].x, \
+										fly[i].y, \
 										bitmap_fly_II, \
-										SIZE_BITMAP_METEOROIDS_X, \
-										SIZE_BITMAP_METEOROIDS_Y, \
+										SIZE_BITMAP_FLYs_X, \
+										SIZE_BITMAP_FLYs_Y, \
 										WHITE);
 			}
-			else if (meteoroid[i].action_image == AR_GAME_METEOROID_ACTION_IMAGE_3) {
-				view_render.drawBitmap(	meteoroid[i].x, \
-										meteoroid[i].y, \
+			else if (fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_3) {
+				view_render.drawBitmap(	fly[i].x, \
+										fly[i].y, \
 										bitmap_fly_III, \
-										SIZE_BITMAP_METEOROIDS_X, \
-										SIZE_BITMAP_METEOROIDS_Y, \
+										SIZE_BITMAP_FLYs_X, \
+										SIZE_BITMAP_FLYs_Y, \
 				 						WHITE);
 			}
 		}
 	}
 }
 
-void ar_game_bee_display() {
+void ar_game_butterfly_display() {
 
-    for(uint8_t i = 0; i < NUM_BEE; i++) {
+    for(uint8_t i = 0; i < NUM_BUTTERFLIES; i++) {
 
-        if(bee[i].visible == WHITE) {
+        if(butterfly[i].visible == WHITE) {
 
-            switch(bee[i].action_image) {
+            switch(butterfly[i].action_image) {
 
-            case AR_GAME_BEE_ACTION_IMAGE_1:
+            case AR_GAME_BUTTERFLY_ACTION_IMAGE_1:
 
                 view_render.drawBitmap(
-                    bee[i].x,
-                    bee[i].y,
-                    bitmap_bee_I,
-                    SIZE_BITMAP_BEE_X,
-                    SIZE_BITMAP_BEE_Y,
+                    butterfly[i].x,
+                    butterfly[i].y,
+                    bitmap_butterfly_I,
+                    SIZE_BITMAP_BUTTERFLY_X,
+                    SIZE_BITMAP_BUTTERFLY_Y,
                     WHITE);
 
                 break;
 
-            case AR_GAME_BEE_ACTION_IMAGE_2:
+            case AR_GAME_BUTTERFLY_ACTION_IMAGE_2:
 
                 view_render.drawBitmap(
-                    bee[i].x,
-                    bee[i].y,
-                    bitmap_bee_II,
-                    SIZE_BITMAP_BEE_X,
-                    SIZE_BITMAP_BEE_Y,
+                    butterfly[i].x,
+                    butterfly[i].y,
+                    bitmap_butterfly_II,
+                    SIZE_BITMAP_BUTTERFLY_X,
+                    SIZE_BITMAP_BUTTERFLY_Y,
                     WHITE);
 
                 break;
 
-            case AR_GAME_BEE_ACTION_IMAGE_3:
+            case AR_GAME_BUTTERFLY_ACTION_IMAGE_3:
 
                 view_render.drawBitmap(
-                    bee[i].x,
-                    bee[i].y,
-                    bitmap_bee_III,
-                    SIZE_BITMAP_BEE_X,
-                    SIZE_BITMAP_BEE_Y,
+                    butterfly[i].x,
+                    butterfly[i].y,
+                    bitmap_butterfly_III,
+                    SIZE_BITMAP_BUTTERFLY_X,
+                    SIZE_BITMAP_BUTTERFLY_Y,
                     WHITE);
 
                 break;
             }
         }
     }
-	for(uint8_t i=0;i<NUM_BEE;i++)
+	for(uint8_t i=0;i<NUM_BUTTERFLIES;i++)
 	{
-		if(bee[i].show_minus20 &&
-			(bee[i].minus20_timer % 2 == 0))
+		if(butterfly[i].show_minus20 &&
+			(butterfly[i].minus20_timer % 2 == 0))
 			{
 				view_render.setCursor(
-					bee[i].minus20_x,
-					bee[i].minus20_y);
+					butterfly[i].minus20_x,
+					butterfly[i].minus20_y);
 
 				view_render.print("-20");
 			}
@@ -249,10 +242,10 @@ void ar_game_border_display() {
 					AXIS_Y_BORDER_UNDER,
 					WHITE);
 
-				for (uint8_t i = 0; i < NUM_METEOROIDS; i++) {
+				for (uint8_t i = 0; i < NUM_FLYs; i++) {
 					view_render.fillCircle(
 						border.x,
-						meteoroid[i].y + 5,
+						fly[i].y + 5,
 						1,
 						WHITE);
 				}
@@ -268,10 +261,10 @@ void ar_game_border_display() {
 				AXIS_Y_BORDER_UNDER,
 				WHITE);
 
-			for (uint8_t i = 0; i < NUM_METEOROIDS; i++) {
+			for (uint8_t i = 0; i < NUM_FLYs; i++) {
 				view_render.fillCircle(
 					border.x,
-					meteoroid[i].y + 3,
+					fly[i].y + 3,
 					1,
 					WHITE);
 			}
@@ -396,21 +389,6 @@ void ar_game_boss_display()
 
         WHITE);
 
-    /**************************************************
-        Hiển thị số HP
-    **************************************************/
-
-// Nếu OLED còn chỗ thì bỏ comment
-
-/*
-    view_render.setTextSize(1);
-
-    view_render.setCursor(
-        boss.x,
-        hp_y - 8);
-
-    view_render.print(boss.hp);
-*/
 }
 
 void ar_game_boss_bullet_display()
@@ -450,8 +428,8 @@ void view_scr_fly_hunter_game() {
 		ar_game_frame_display();
 		ar_game_fly_hunter_display();
 		ar_game_arrow_display();
-		ar_game_meteoroid_display();
-		ar_game_bee_display();
+		ar_game_fly_display();
+		ar_game_butterfly_display();
 		ar_game_bang_display();
 		ar_game_boss_display();
 		ar_game_border_display();
@@ -484,20 +462,6 @@ void view_scr_fly_hunter_game() {
 			border_flash--;
 		}
 	}
-	else if (ar_game_state == GAME_OVER) {
-		view_render.clear();
-		view_render.drawBitmap(	0, \
-			0, \
-			bitmap_dolphin, \
-			119, \
-			62, \
-			WHITE);
-		
-		view_render.setTextSize(1);
-		view_render.setTextColor(WHITE);
-		view_render.setCursor(74, 15);
-		ar_game_print_text_partial(ar_game_over_text, ar_game_over_text_index);
-	}
 }
 
 /*****************************************************************************/
@@ -528,10 +492,10 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		// Setup game Object
 		task_post_pure_msg(AR_GAME_FLY_HUNTER_ID, 	 	AR_GAME_FLY_HUNTER_SETUP);
 		task_post_pure_msg(AR_GAME_ARROW_ID, 	 	AR_GAME_ARROW_SETUP);
-		task_post_pure_msg(AR_GAME_METEOROID_ID, 	AR_GAME_METEOROID_SETUP);
+		task_post_pure_msg(AR_GAME_FLY_ID, 	AR_GAME_FLY_SETUP);
 		task_post_pure_msg(AR_GAME_BANG_ID, 	 	AR_GAME_BANG_SETUP);
 		task_post_pure_msg(AR_GAME_BORDER_ID, 	 	AR_GAME_BORDER_SETUP);
-		task_post_pure_msg(AR_GAME_BEE_ID,           AR_GAME_BEE_SETUP);
+		task_post_pure_msg(AR_GAME_BUTTERFLY_ID,           AR_GAME_BUTTERFLY_SETUP);
 		task_post_pure_msg(AR_GAME_BOSS_ID,         AR_GAME_BOSS_SETUP);
 		task_post_pure_msg(AR_GAME_BOSS_BULLET_ID,  AR_GAME_BOSS_BULLET_SETUP);
 		// Set state 'GAME_PLAY' & remove idle screen timer
@@ -540,7 +504,7 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 
 		warning_timer = 0;
 
-		next_boss_score = 1000;
+		next_boss_score = 500;
 
 		timer_remove_attr(AC_TASK_DISPLAY_ID, AC_DISPLAY_SHOW_IDLE);
 
@@ -556,13 +520,13 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		// Time tick
 		task_post_pure_msg(AR_GAME_FLY_HUNTER_ID, 		AR_GAME_FLY_HUNTER_UPDATE);
 		task_post_pure_msg(AR_GAME_ARROW_ID, 		AR_GAME_ARROW_RUN);
-		task_post_pure_msg(AR_GAME_METEOROID_ID, 	AR_GAME_METEOROID_RUN);
-		task_post_pure_msg(AR_GAME_METEOROID_ID, 	AR_GAME_METEOROID_DETONATOR);
+		task_post_pure_msg(AR_GAME_FLY_ID, 	AR_GAME_FLY_RUN);
+		task_post_pure_msg(AR_GAME_FLY_ID, 	AR_GAME_FLY_DETONATOR);
 		task_post_pure_msg(AR_GAME_BANG_ID, 		AR_GAME_BANG_UPDATE);
 		task_post_pure_msg(AR_GAME_BORDER_ID, 		AR_GAME_LEVEL_UP);
 		task_post_pure_msg(AR_GAME_BORDER_ID, 		AR_GAME_CHECK_GAME_OVER);
-		task_post_pure_msg(AR_GAME_BEE_ID,           AR_GAME_BEE_RUN);
-		task_post_pure_msg(AR_GAME_BEE_ID,           AR_GAME_BEE_DETONATOR);
+		task_post_pure_msg(AR_GAME_BUTTERFLY_ID,           AR_GAME_BUTTERFLY_RUN);
+		task_post_pure_msg(AR_GAME_BUTTERFLY_ID,           AR_GAME_BUTTERFLY_DETONATOR);
 		task_post_pure_msg(AR_GAME_BOSS_ID,         AR_GAME_BOSS_RUN);
 		task_post_pure_msg(AR_GAME_BOSS_ID,         AR_GAME_BOSS_DETONATOR);
 		task_post_pure_msg(AR_GAME_BOSS_BULLET_ID,  AR_GAME_BOSS_BULLET_RUN);
@@ -603,20 +567,14 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		// Reset game Object
 		task_post_pure_msg(AR_GAME_FLY_HUNTER_ID, 		AR_GAME_FLY_HUNTER_RESET);
 		task_post_pure_msg(AR_GAME_ARROW_ID, 		AR_GAME_ARROW_RESET);
-		task_post_pure_msg(AR_GAME_METEOROID_ID,	AR_GAME_METEOROID_RESET);
+		task_post_pure_msg(AR_GAME_FLY_ID,	AR_GAME_FLY_RESET);
 		task_post_pure_msg(AR_GAME_BANG_ID, 		AR_GAME_BANG_RESET);
 		task_post_pure_msg(AR_GAME_BORDER_ID, 		AR_GAME_BORDER_RESET);
-		task_post_pure_msg(AR_GAME_BEE_ID,          AR_GAME_BEE_RESET);
+		task_post_pure_msg(AR_GAME_BUTTERFLY_ID,          AR_GAME_BUTTERFLY_RESET);
 		task_post_pure_msg(AR_GAME_BOSS_ID,			AR_GAME_BOSS_RESET);
 		task_post_pure_msg(AR_GAME_BOSS_BULLET_ID,  AR_GAME_BOSS_BULLET_RESET);
 		// Reset text animation index
 		ar_game_over_text_index = 0;
-
-		// Timer Exit
-		timer_set(	AC_TASK_DISPLAY_ID, \
-					AR_GAME_EXIT_GAME, \
-					AR_GAME_TIME_EXIT_INTERVAL, \
-					TIMER_ONE_SHOT);
 
 		// Save and reset Score
 		ar_game_score_read(&gamescore);
@@ -624,12 +582,6 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		rank_ranking();
 		ar_game_score_write(&gamescore);
 		ar_game_score = 10;
-
-		// Setup text animation timer
-		timer_set(	AC_TASK_DISPLAY_ID, \
-					AR_GAME_OVER_TEXT_ANIM_TICK, \
-					AR_GAME_OVER_TEXT_ANIM_TICK_INTERVAL, \
-					TIMER_PERIODIC);
 
 		if (gamescore.score_now > AR_GAME_HIGHSCORE_SCORE) {
 			ar_game_over_text = ar_game_random_text(ar_game_praise_text, \
@@ -643,32 +595,9 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		}
 
 		// State update
-		ar_game_state = GAME_OVER;
-	} break;
-
-	case AR_GAME_OVER_TEXT_ANIM_TICK: {
-		APP_DBG_SIG("AR_GAME_OVER_TEXT_ANIM_TICK\n");
-		if (ar_game_over_text_index < AR_GAME_COMMAND_TEXT_MAX_LEN) {
-			ar_game_over_text_index++;
-		}
-		else {
-			timer_remove_attr(AC_TASK_DISPLAY_ID, AR_GAME_OVER_TEXT_ANIM_TICK);
-		}
-	} break;
-
-	case AR_GAME_EXIT_GAME: {
-		APP_DBG_SIG("AR_GAME_EXIT_GAME\n");
-		// Stop text animation timer
-		timer_remove_attr(AC_TASK_DISPLAY_ID, AR_GAME_OVER_TEXT_ANIM_TICK);
-
-		// Set state 'GAME_OFF' & set timer show idle screen
 		ar_game_state = GAME_OFF;
-		timer_set(	AC_TASK_DISPLAY_ID, \
-			AC_DISPLAY_SHOW_IDLE, \
-			AC_DISPLAY_IDLE_INTERVAL, \
-			TIMER_ONE_SHOT);
 
-		// Change the screen
+
 		SCREEN_TRAN(scr_game_over_handle, &scr_game_over);
 	} break;
 
@@ -680,4 +609,3 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		break;
 	}
 }
-

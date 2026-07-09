@@ -1,6 +1,6 @@
 #include "ar_game_bang.h"
 
-#include "ar_game_meteoroid.h"
+#include "ar_game_fly.h"
 #include "ar_game_arrow.h"
 
 ar_game_bang_t bang[NUM_BANG];
@@ -24,10 +24,10 @@ void ar_game_bang_handle(ak_msg_t *msg) {
 				bang[i].action_image++;
 			}
 			if (bang[i].action_image >= AR_GAME_BANG_ACTION_IMAGE_END) {
-                // Clear bang and show meteoroid
+                // Clear bang and show fly
 				bang[i].action_image = AR_GAME_BANG_ACTION_IMAGE_1;
 				bang[i].visible		 = BLACK;
-				meteoroid[i].visible = WHITE;
+				fly[i].visible = WHITE;
 			}
 		}
 	} break;

@@ -31,15 +31,15 @@
 #define AR_GAME_SETTING_NUM_ARROW_MAX            (9)
 #define AR_GAME_SETTING_NUM_ARROW_DEFAULT        (5)
 #define AR_GAME_SETTING_ARROW_SPEED_DEFAULT      (5)
-#define AR_GAME_SETTING_METEOROID_SPEED_MIN      (1)
-#define AR_GAME_SETTING_METEOROID_SPEED_MAX      (5)
-#define AR_GAME_SETTING_METEOROID_SPEED_DEFAULT  (1)
+#define AR_GAME_SETTING_FLY_SPEED_MIN            (1)
+#define AR_GAME_SETTING_FLY_SPEED_MAX            (5)
+#define AR_GAME_SETTING_FLY_SPEED_DEFAULT        (1)
 
 typedef struct {
   bool silent;
   uint8_t num_arrow;
   uint8_t arrow_speed;
-  uint8_t meteoroid_speed;
+  uint8_t fly_speed;
 } ar_game_setting_t;
 
 /* score data */

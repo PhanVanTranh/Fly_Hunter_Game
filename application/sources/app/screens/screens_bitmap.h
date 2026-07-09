@@ -4,6 +4,12 @@
 #include "view_render.h"
 
 // scr_fly_hunter_game
+extern const unsigned char PROGMEM icon_gear[];
+extern const unsigned char PROGMEM icon_arrows[];
+extern const unsigned char PROGMEM icon_fly[];
+extern const unsigned char PROGMEM icon_sound[];
+extern const unsigned char PROGMEM icon_exit[];
+
 extern const unsigned char PROGMEM bitmap_heart[];
 extern const unsigned char PROGMEM bitmap_fly_hunter_I []; 
 extern const unsigned char PROGMEM bitmap_fly_hunter_II [];
@@ -11,9 +17,9 @@ extern const unsigned char PROGMEM bitmap_fly_I[];
 extern const unsigned char PROGMEM bitmap_fly_II[];
 extern const unsigned char PROGMEM bitmap_fly_III[];
 extern const unsigned char PROGMEM bitmap_fly_boss[];
-extern const unsigned char PROGMEM bitmap_bee_I[];
-extern const unsigned char PROGMEM bitmap_bee_II[];
-extern const unsigned char PROGMEM bitmap_bee_III[];
+extern const unsigned char PROGMEM bitmap_butterfly_I[];
+extern const unsigned char PROGMEM bitmap_butterfly_II[];
+extern const unsigned char PROGMEM bitmap_butterfly_III[];
 extern const unsigned char PROGMEM bitmap_arrow [];
 extern const unsigned char PROGMEM bitmap_bang_I [];
 extern const unsigned char PROGMEM bitmap_bang_II [];
@@ -41,5 +47,6 @@ extern const unsigned char PROGMEM exit_icon [];
 
 // scr_startup
 extern const unsigned char PROGMEM bitmap_fly_hunter_logo[];
+extern const unsigned char PROGMEM bitmap_fly_hunter_logo_I[];
 
 #endif //__SCREENS_BITMAP_H__

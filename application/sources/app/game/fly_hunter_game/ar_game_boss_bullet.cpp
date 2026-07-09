@@ -189,17 +189,3 @@ void ar_game_boss_bullet_handle(ak_msg_t *msg)
 
 }
 
-// void ar_game_boss_bullet_display()
-// {
-//     for(uint8_t i=0;i<NUM_BOSS_BULLET;i++)
-//     {
-//         if(boss_bullet[i].visible == BLACK)
-//             continue;
-
-//         view_render.fillCircle(
-//             boss_bullet[i].x,
-//             boss_bullet[i].y,
-//             2,
-//             WHITE);
-//     }
-// }

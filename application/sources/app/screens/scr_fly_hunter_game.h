@@ -27,8 +27,8 @@
 #include "ar_game_arrow.h"
 #include "ar_game_bang.h"
 #include "ar_game_border.h"
-#include "ar_game_meteoroid.h"
-#include "ar_game_bee.h"
+#include "ar_game_fly.h"
+#include "ar_game_butterfly.h"
 #include "ar_game_boss.h"
 #include "ar_game_boss_bullet.h"
 

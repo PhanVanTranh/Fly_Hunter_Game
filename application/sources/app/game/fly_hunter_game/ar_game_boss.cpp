@@ -5,16 +5,16 @@
 
 #define BOSS_MOVE_DELAY         2
 #define BOSS_HP_INCREMENT       5
-#define BOSS_SCORE_REWARD       200
-#define NEXT_BOSS_SCORE_STEP    1000
+#define BOSS_SCORE_REWARD       300
+#define NEXT_BOSS_SCORE_STEP    500
 #define BOSS_EXPLODE_TIME       24
 
 ar_game_boss_t boss;
 
-/* Boss mạnh dần sau mỗi lần bị tiêu diệt */
+/* Boss gets stronger after each time it is defeated */
 static uint8_t boss_hp = 10;
 
-/* Boss di chuyển chậm */
+/* Boss moves slowly */
 static uint8_t boss_move_tick = 0;
 
 /****************************************************/
@@ -123,16 +123,16 @@ void ar_game_boss_handle(ak_msg_t *msg)
         **************************************************/
 
         task_post_pure_msg(
-            AR_GAME_METEOROID_ID,
-            AR_GAME_METEOROID_RESET);
+            AR_GAME_FLY_ID,
+            AR_GAME_FLY_RESET);
 
         /**************************************************
-            Xóa Bee
+            Xóa Butterfly
         **************************************************/
 
         task_post_pure_msg(
-            AR_GAME_BEE_ID,
-            AR_GAME_BEE_RESET);
+            AR_GAME_BUTTERFLY_ID,
+            AR_GAME_BUTTERFLY_RESET);
 
         /**************************************************
             Xóa toàn bộ Arrow đang bay
@@ -218,16 +218,16 @@ void ar_game_boss_handle(ak_msg_t *msg)
                 **********************************************/
 
                 task_post_pure_msg(
-                    AR_GAME_METEOROID_ID,
-                    AR_GAME_METEOROID_SETUP);
+                    AR_GAME_FLY_ID,
+                    AR_GAME_FLY_SETUP);
 
                 /**********************************************
-                    Spawn lại Bee
+                    Spawn lại Butterfly
                 **********************************************/
 
                 task_post_pure_msg(
-                    AR_GAME_BEE_ID,
-                    AR_GAME_BEE_SETUP);
+                    AR_GAME_BUTTERFLY_ID,
+                    AR_GAME_BUTTERFLY_SETUP);
             }
 
             break;
@@ -340,16 +340,16 @@ void ar_game_boss_handle(ak_msg_t *msg)
                 **********************************************/
 
                 task_post_pure_msg(
-                    AR_GAME_METEOROID_ID,
-                    AR_GAME_METEOROID_SETUP);
+                    AR_GAME_FLY_ID,
+                    AR_GAME_FLY_SETUP);
 
                 /**********************************************
-                    Spawn lại Bee
+                    Spawn lại Butterfly
                 **********************************************/
 
                 task_post_pure_msg(
-                    AR_GAME_BEE_ID,
-                    AR_GAME_BEE_SETUP);
+                    AR_GAME_BUTTERFLY_ID,
+                    AR_GAME_BUTTERFLY_SETUP);
             }
         }
 
@@ -385,7 +385,7 @@ void ar_game_boss_handle(ak_msg_t *msg)
                 SIZE_BITMAP_BOSS_Y))
             {
                 /********************************************
-                    Xóa mũi tên
+                    Clear arrow
                 ********************************************/
 
                 arrow[i].visible = BLACK;

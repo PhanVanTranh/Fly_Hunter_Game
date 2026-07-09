@@ -222,27 +222,27 @@ enum {
 };
 
 /*****************************************************************************/
-/*  fly_hunter game 'METEOROID' task define
+/*  fly_hunter game 'FLY' task define
  */
 /*****************************************************************************/
 /* define timer */
 /* define signal */
 enum {
-	AR_GAME_METEOROID_SETUP = AR_GAME_DEFINE_SIG,
-	AR_GAME_METEOROID_RUN,
-	AR_GAME_METEOROID_DETONATOR,
-	AR_GAME_METEOROID_RESET,
+	AR_GAME_FLY_SETUP = AR_GAME_DEFINE_SIG,
+	AR_GAME_FLY_RUN,
+	AR_GAME_FLY_DETONATOR,
+	AR_GAME_FLY_RESET,
 };
 
 /*****************************************************************************/
-/* fly hunter game 'BEE' task define
+/* fly hunter game 'BUTTERFLY' task define
  */
 /*****************************************************************************/
 enum {
-    AR_GAME_BEE_SETUP = AR_GAME_DEFINE_SIG,
-    AR_GAME_BEE_RUN,
-    AR_GAME_BEE_DETONATOR,
-    AR_GAME_BEE_RESET,
+    AR_GAME_BUTTERFLY_SETUP = AR_GAME_DEFINE_SIG,
+    AR_GAME_BUTTERFLY_RUN,
+    AR_GAME_BUTTERFLY_DETONATOR,
+    AR_GAME_BUTTERFLY_RESET,
 };
 
 /*****************************************************************************/

@@ -1,5 +1,5 @@
-#ifndef __AR_GAME_BEE_H__
-#define __AR_GAME_BEE_H__
+#ifndef __AR_GAME_BUTTERFLY_H__
+#define __AR_GAME_BUTTERFLY_H__
 
 #include <stdio.h>
 
@@ -16,16 +16,16 @@
 #include "buzzer.h"
 #include "scr_fly_hunter_game.h"
 
-#define NUM_BEE                 (1)
+#define NUM_BUTTERFLIES       (1)
 
-#define SIZE_BITMAP_BEE_X       (20)
-#define SIZE_BITMAP_BEE_Y       (10)
+#define SIZE_BITMAP_BUTTERFLY_X       (20)
+#define SIZE_BITMAP_BUTTERFLY_Y       (10)
 
 enum {
-    AR_GAME_BEE_ACTION_IMAGE_1 = 1,
-    AR_GAME_BEE_ACTION_IMAGE_2,
-    AR_GAME_BEE_ACTION_IMAGE_3,
-    AR_GAME_BEE_ACTION_IMAGE_END
+    AR_GAME_BUTTERFLY_ACTION_IMAGE_1 = 1,
+    AR_GAME_BUTTERFLY_ACTION_IMAGE_2,
+    AR_GAME_BUTTERFLY_ACTION_IMAGE_3,
+    AR_GAME_BUTTERFLY_ACTION_IMAGE_END
 };
 
 typedef struct {
@@ -42,10 +42,10 @@ typedef struct {
     int16_t minus20_x;
     int16_t minus20_y;
     uint8_t minus20_timer; 
-} ar_game_bee_t;
+} ar_game_butterfly_t;
 
-extern ar_game_bee_t bee[NUM_BEE];
+extern ar_game_butterfly_t butterfly[NUM_BUTTERFLIES];
 
-void ar_game_bee_handle(ak_msg_t *msg);
+void ar_game_butterfly_handle(ak_msg_t *msg);
 
-#endif // __AR_GAME_BEE_H__
+#endif // __AR_GAME_BUTTERFLY_H__

@@ -91,7 +91,7 @@ static void ar_game_setting_set_default(ar_game_setting_t *data) {
 	data->silent	      = AR_GAME_SETTING_SILENT_ON;
 	data->num_arrow	  	  = AR_GAME_SETTING_NUM_ARROW_DEFAULT;
 	data->arrow_speed	  = AR_GAME_SETTING_ARROW_SPEED_DEFAULT;
-	data->meteoroid_speed = AR_GAME_SETTING_METEOROID_SPEED_DEFAULT;
+	data->fly_speed = AR_GAME_SETTING_FLY_SPEED_DEFAULT;
 }
 
 bool ar_game_setting_read(ar_game_setting_t *data) {
