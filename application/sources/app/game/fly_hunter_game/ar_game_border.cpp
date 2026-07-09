@@ -70,6 +70,10 @@ void ar_game_border_handle(ak_msg_t *msg) {
 					}
 					else {
 						fly[i].y = RANDOM_FLY_Y_BOTTOM();
+						
+						if (fly[i].y > (52 - SIZE_BITMAP_FLYs_Y)) {
+                            fly[i].y = 52 - SIZE_BITMAP_FLYs_Y;
+                        }
 					}
 				}
 

@@ -144,6 +144,9 @@ void fly_adjust_position(uint8_t index)
 
         if(!overlap)
         {
+            if (fly[index].y > (52 - SIZE_BITMAP_FLYs_Y)) {
+                fly[index].y = 52 - SIZE_BITMAP_FLYs_Y; 
+            }
             return;
         }
 
@@ -170,6 +173,10 @@ void fly_random_position(uint8_t index)
         else
             fly[index].y = RANDOM_FLY_Y_BOTTOM();
 
+        if (fly[index].y > (52 - SIZE_BITMAP_FLYs_Y)) {
+            fly[index].y = 52 - SIZE_BITMAP_FLYs_Y; 
+        }
+        
         for(uint8_t i = 0; i < NUM_BUTTERFLIES; i++)
         {
             if(butterfly[i].visible == WHITE)
