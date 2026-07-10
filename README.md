@@ -4,12 +4,6 @@
   <video src="https://github.com/user-attachments/assets/e24911bf-5073-4d07-a8e8-738927585d1b" controls width="480"></video>
 </div>
 
-An embedded arcade shooting game developed for the <b>AK Embedded Kit (STM32)</b>.
-
-Shoot flies, avoid bees, defeat powerful bosses, and achieve the highest score!
-
-</p>
-
 ---
 ## Documentation
 
@@ -93,8 +87,8 @@ Flash Partitions Layout
 |---|---|---|
 | **Hunter** | `bitmap_fly_hunter_I` / `bitmap_fly_hunter_II` | The player character. Stands at the shooting position and fires arrows. Has a 2-frame idle/shoot animation. |
 | **Arrow** | `bitmap_arrow` | Projectile fired by the Hunter. Travels across the screen and destroys any Fly, Bee, or Boss it hits. |
-| **Fly / Meteoroid** | `bitmap_fly_I` / `II` / `III` | The main enemy wave. Flies in from the right side toward the border on the left. If it crosses the border, the player loses one life. Spawn speed increases as the score rises (Level Up mechanic). |
-| **Bee** | `bitmap_bee_I` / `II` / `III` | A special enemy. Shows a floating `-20` text and penalizes the score when involved, adding risk/reward to the fight. |
+| **Fly** | `bitmap_fly_I` / `II` / `III` | The main enemy wave. Flies in from the right side toward the border on the left. If it crosses the border, the player loses one life. Spawn speed increases as the score rises (Level Up mechanic). |
+| **Butterfly** | `bitmap_butterfly_I` / `II` / `III` | A special enemy. Shows a floating `-20` text and penalizes the score when involved, adding risk/reward to the fight. |
 | **Boss** | `bitmap_fly_boss` | A large enemy that spawns once the score passes a threshold (starting at 1000, increasing over time). Has its own HP bar drawn above/below it, shakes when hit, and dies through a 3-frame explosion animation (`bitmap_bang_I/II/III`). |
 | **Boss Bullet** | (filled circle) | Projectile fired back by the Boss at the player. |
 | **Bang (Explosion)** | `bitmap_bang_I` / `II` / `III` | Generic explosion effect played whenever an enemy (Fly/Bee/Boss) is destroyed. |
