@@ -1,10 +1,8 @@
 # 🪰 Fly Hunter Game
 
-<p align="center">
-  <img src="docs/images/logo.png" width="220">
-</p>
-
-<p align="center">
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/e24911bf-5073-4d07-a8e8-738927585d1b" controls width="480"></video>
+</div>
 
 An embedded arcade shooting game developed for the <b>AK Embedded Kit (STM32)</b>.
 
