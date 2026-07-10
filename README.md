@@ -22,10 +22,9 @@
 
 Like other embedded games built on the AK platform, Fly Hunter is also a practical showcase of embedded system design concepts:
 - **System design** — screens and game objects organized as independent, event-driven modules (UML-style).
-- **Process management** — each game object (Hunter, Arrow, Fly, Bee, Boss, Boss Bullet, Bang, Border) is handled as its own task with its own message handler.
-- **Communication** — objects talk to each other purely through **Signal / Timer / Message** (`task_post_pure_msg`, `timer_set`), no direct function coupling.
-- **Control logic** — screen navigation is implemented as a **Finite State Machine** (`SCREEN_TRAN`, `SCREEN_ENTRY`), and gameplay difficulty scales through a simple state machine (`GAME_STATE_NORMAL → GAME_STATE_WARNING → GAME_STATE_BOSS`).
-
+- **Process management** — each game object (Hunter, Arrow, Fly, Butterfly, Boss, Boss Bullet, Bang, Border) is handled as its own task with its own message handler.
+- **Communication** — objects talk to each other purely through **Signal / Timer / Message**, no direct function coupling.
+- **Control logic** — screen navigation is implemented as a **Finite State Machine**, and gameplay difficulty scales through a simple state machine.
 
 ### I. Hardware
 
@@ -85,7 +84,7 @@ Flash Partitions Layout
 
 | Object | Bitmap | Description |
 |---|---|---|
-| **Hunter** | `bitmap_fly_hunter_I` / `bitmap_fly_hunter_II` | The player character. Stands at the shooting position and fires arrows. Has a 2-frame idle/shoot animation. |
+| **Hunter** | <img src="resources/images/bitmap/bitmap_gunner.gif" width="100"/>| The player character. Stands at the shooting position and fires arrows. Has a 2-frame idle/shoot animation. |
 | **Arrow** | `bitmap_arrow` | Projectile fired by the Hunter. Travels across the screen and destroys any Fly, Bee, or Boss it hits. |
 | **Fly** | `bitmap_fly_I` / `II` / `III` | The main enemy wave. Flies in from the right side toward the border on the left. If it crosses the border, the player loses one life. Spawn speed increases as the score rises (Level Up mechanic). |
 | **Butterfly** | `bitmap_butterfly_I` / `II` / `III` | A special enemy. Shows a floating `-20` text and penalizes the score when involved, adding risk/reward to the fight. |
