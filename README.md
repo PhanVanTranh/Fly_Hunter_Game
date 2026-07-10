@@ -80,7 +80,27 @@ Flash Partitions Layout
 
 ### II - Game Description and Objects
 
-<!-- TODO: insert screenshots/GIFs of the main menu and gameplay screen here -->
+The following section describes the gameplay and core mechanics of Fly Hunter. It serves as a reference for understanding the game's mechanics and firmware implementation.
+
+<div align="center">
+  <video src="https://github.com/user-attachments/assets/8b70afef-360f-4585-9976-2dc426d1ed1a" controls width="480"></video>
+</div>     
+
+When the game starts, the Main Menu is displayed with the following options:
+
+- **Start Game:** Begin a new game.
+- **Settings:** Configure gameplay parameters such as sound and difficulty.
+- **High Score:** Display the top three highest scores saved in memory.
+- **Exit:** Return to the idle screen.
+
+
+<p align="center"> <img src="docs/images/gameplay_screen.jpg" width="320"><br> <em><b>Figure 4.</b> Gameplay Screen</em> </p>
+
+During gameplay, the player controls a hunter positioned on the left side of the screen. The objective is to shoot incoming enemies while avoiding penalties.
+
+
+
+#### Objects in the Game:
 
 | Object | Bitmap | Description |
 |---|---|---|
@@ -100,8 +120,6 @@ Flash Partitions Layout
 - **MODE** — Shoot an arrow (in-game) / Confirm & adjust a value (in the Settings menu).
 - **UP** — Move the Hunter up / Navigate up in menus.
 - **DOWN** — Move the Hunter down / Navigate down in menus.
-- **UP (long press)** — Jump setting values to their maximum.
-- **DOWN (long press)** — Jump setting values to their minimum.
 
 **Game Mechanics:**  
 - Destroy Flies, Bees, and the Boss with arrows to increase your **Score**.
