@@ -84,13 +84,13 @@ Flash Partitions Layout
 
 | Object | Bitmap | Description |
 |---|---|---|
-| **Hunter** | <p align="center"><img src="resources/images/bitmap/arcery_1.png" width="100"/></p>| The player character. Stands at the shooting position and fires arrows. Has a 2-frame idle/shoot animation. |
+| **Hunter** | <p align="center"><img src="resources/images/bitmap/archery_1.png" width="100"/></p>| The player character. Stands at the shooting position and fires arrows. Has a 2-frame idle/shoot animation. |
 | **Arrow** | <p align="center"><img src="resources/images/bitmap/arrow.png" width="100"/></p>| Projectile fired by the Hunter. Travels across the screen and destroys any Fly, Bee, or Boss it hits. |
 | **Fly** | <p align="center"><img src="resources/images/bitmap/bitmap_fly_hunter_I.png" width="100"/></p> | The main enemy wave. Flies in from the right side toward the border on the left. If it crosses the border, the player loses one life. Spawn speed increases as the score rises (Level Up mechanic). |
-| **Butterfly** | `bitmap_butterfly_I` / `II` / `III` | A special enemy. Shows a floating `-20` text and penalizes the score when involved, adding risk/reward to the fight. |
-| **Boss** | `bitmap_fly_boss` | A large enemy that spawns once the score passes a threshold (starting at 1000, increasing over time). Has its own HP bar drawn above/below it, shakes when hit, and dies through a 3-frame explosion animation (`bitmap_bang_I/II/III`). |
+| **Butterfly** | <p align="center"><img src="resources/images/bitmap/bitmap_butterfly_I.png" width="100"/></p> | A special enemy. Shows a floating `-20` text and penalizes the score when involved, adding risk/reward to the fight. |
+| **Boss** | <p align="center"><img src="resources/images/bitmap/bitmap_fly_hunter_II.png" width="100"/></p> | A large enemy that spawns once the score passes a threshold (starting at 1000, increasing over time). Has its own HP bar drawn above/below it, shakes when hit, and dies through a 3-frame explosion animation (`bitmap_bang_I/II/III`). |
 | **Boss Bullet** | (filled circle) | Projectile fired back by the Boss at the player. |
-| **Bang (Explosion)** | `bitmap_bang_I` / `II` / `III` | Generic explosion effect played whenever an enemy (Fly/Bee/Boss) is destroyed. |
+| **Bang (Explosion)** | <p align="center"><img src="resources/images/bitmap/bang_1.png" width="100"/></p>| Generic explosion effect played whenever an enemy (Fly/Bee/Boss) is destroyed. |
 | **Border** | (vertical flashing line) | The "kill line" on the left edge of the play area. Enemies crossing it cost the player a life; the border flashes white when the player is hit. |
 | **Heart** | `bitmap_heart` | Displayed at the bottom-left of the HUD to represent the player's remaining lives. |
 | **Score** | text | Displayed at the top-right of the HUD, increases as enemies are destroyed. |
