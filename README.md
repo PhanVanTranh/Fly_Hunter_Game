@@ -1,4 +1,4 @@
-# 🪰 Fly Hunter Game
+# Fly Hunter Game
 
 <div align="center">
   <video src="https://github.com/user-attachments/assets/e24911bf-5073-4d07-a8e8-738927585d1b" controls width="480"></video>
@@ -11,247 +11,137 @@ Shoot flies, avoid bees, defeat powerful bosses, and achieve the highest score!
 </p>
 
 ---
+## Documentation
 
-# 📖 Introduction
+| File | Description |
+|---|---|
+| [README.md](./README.md) | Project overview (this file) |
+| [docs/01-guide-getting-started.md](./docs/01-guide-getting-started.md) | How to build, flash and run the project |
+| [docs/02-guide-coding-rules.md](./docs/02-guide-coding-rules.md) | Coding conventions used in this project |
+| [docs/03-design-sequence-object.md](./docs/03-design-sequence-object.md) | Sequence diagrams for each game object (Hunter, Arrow, Fly, Bee, Boss...) |
+| [docs/04-design-sequence-runtime.md](./docs/04-design-sequence-runtime.md) | Runtime signal/message flow (Mermaid diagrams) |
 
-Fly Hunter Game is a 2D arcade shooting game designed and implemented on the AK Embedded Kit using the STM32 microcontroller.
 
-The player controls a hunter and shoots arrows to eliminate incoming flies before they cross the defense line. Throughout the game, dangerous bees and powerful bosses appear, making the gameplay increasingly challenging.
+## Introduction
 
-The project demonstrates real-time graphics rendering, sprite animation, collision detection, sound effects, finite state machine (FSM), timer scheduling, EEPROM data storage, and embedded software architecture.
+**Fly Hunter** is a 2D shooting mini-game built on the AK Embedded Base Kit, inspired by classic side-scrolling shooters. The player controls a hunter standing at a fixed border on the left side of the screen, aiming and shooting arrows at incoming flies, bees, and meteoroids before they cross the border. Every few hundred points, a **Boss** appears with its own HP bar and bullet attacks, raising the difficulty and testing the player's reflexes.
 
----
+Like other embedded games built on the AK platform, Fly Hunter is also a practical showcase of embedded system design concepts:
+- **System design** — screens and game objects organized as independent, event-driven modules (UML-style).
+- **Process management** — each game object (Hunter, Arrow, Fly, Bee, Boss, Boss Bullet, Bang, Border) is handled as its own task with its own message handler.
+- **Communication** — objects talk to each other purely through **Signal / Timer / Message** (`task_post_pure_msg`, `timer_set`), no direct function coupling.
+- **Control logic** — screen navigation is implemented as a **Finite State Machine** (`SCREEN_TRAN`, `SCREEN_ENTRY`), and gameplay difficulty scales through a simple state machine (`GAME_STATE_NORMAL → GAME_STATE_WARNING → GAME_STATE_BOSS`).
 
-# ✨ Features
 
-- 🪰 Shoot flies to earn points
-- 🐝 Bees act as dangerous obstacles
-- 👾 Boss battle every 600 points
-- ❤️ Multiple life system
-- 💥 Explosion animations
-- 🔊 Sound effects
-- 🏆 High score ranking
-- 💾 EEPROM data storage
-- 🎮 Interactive menu system
-- ⚙️ Game settings
-- 📊 High score screen
-- 🚀 Startup animation
+### I. Hardware
 
----
+<table align="center">
+  <tr>
+    <td align="center"><img src="resources/images/board/ak-embedded-base-kit-version-3.jpg" alt="AK Embedded Base Kit - STM32L151 - v3.0" width="480"/></td>
+  </tr>
+</table>
+<p align="center"><strong><em>Figure 1:</em></strong> AK Embedded Base Kit - STM32L151</p>
 
-# 🎮 Gameplay
+[AK Embedded Base Kit](https://epcb.vn/products/ak-embedded-base-kit-lap-trinh-nhung-vi-dieu-khien-mcu) is an evaluation kit aimed at intermediate and advanced embedded software learners.
 
-## Main Menu
+The kit integrates a **1.54" OLED LCD**, **3 push buttons**, and **a buzzer** capable of playing short melodies, giving you everything you need to study **event-driven systems** through hands-on game-machine design.
+It also exposes **RS485**, the **Qwiic Connect System**, and **Grove** connectors, so it doubles as a convenient prototyping board for real-world embedded projects.
 
-- Start Game
-- Settings
-- High Score
-- Exit
+**MCU Overview:**
 
----
+```text
+SoC Name : STM32L151CBT6
+RAM      : 16 KB
 
-## During Gameplay
+Flash Partitions Layout
+----------------------
+[ 0x08000000 - 0x08001FFF ] : Bootloader Partition (8 KB)
+=> AK Bootloader
 
-- Shoot flies to gain points.
-- Prevent flies from crossing the defense line.
-- Each escaped fly costs one life.
-- Shooting bees decreases your score.
-- Bosses appear every **600 points**.
-- Defeat bosses to continue progressing.
-- The game ends when all lives are lost.
+[ 0x08002000 - 0x08002FFF ] : BSF Shared Partition (4 KB)
+=> Used for data sharing between Bootloader and Application
 
----
-
-# 👾 Enemies
-
-## Fly
-
-- Main target
-- +10 score when defeated
-
----
-
-## Bee
-
-- Dangerous obstacle
-- Shooting a bee decreases your score
-
----
-
-## Boss
-
-- Appears every 600 points
-- Has multiple HP
-- Shoots bullets toward the player
-- Explosion animation when defeated
-
----
-
-# ❤️ Player
-
-The player can
-
-- Move vertically
-- Shoot arrows
-- Destroy flies
-- Fight bosses
-- Protect the defense line
-
----
-
-# 🏆 High Score
-
-The game stores
-
-- Current score
-- Top 1
-- Top 2
-- Top 3
-
-using EEPROM, allowing scores to persist after restarting the device.
-
----
-
-# 🔊 Sound Effects
-
-Different sounds are played for
-
-- Startup
-- Shooting
-- Hit
-- Boss warning
-- Boss defeated
-- Menu navigation
-- Game Over
-
----
-
-# 🛠 Hardware
-
-- AK Embedded Kit
-- STM32 MCU
-- 128×64 OLED Display
-- Buzzer
-- Push Buttons
-- EEPROM
-
----
-
-# 📂 Project Structure
-
-```
-Fly_Hunter_Game
-│
-├── app/
-├── driver/
-├── middleware/
-├── screen/
-│     ├── Startup
-│     ├── Menu
-│     ├── Game
-│     ├── Setting
-│     ├── High Score
-│     └── Game Over
-│
-├── game/
-│     ├── Fly
-│     ├── Bee
-│     ├── Boss
-│     ├── Arrow
-│     ├── Border
-│     ├── Bang
-│     └── Fly Hunter
-│
-└── resources/
+[ 0x08003000 - 0x0801FFFF ] : Application Partition (116 KB)
+=> Zomwar firmware
 ```
 
----
+**MCU Naming Convention:**
 
-# 🧩 Software Architecture
+| Part | Meaning |
+|---|---|
+| `STM32` | STMicroelectronics 32-bit MCU family. |
+| `L` | Low-power series. |
+| `151` | STM32L151 product line. |
+| `C` | 48-pin package. |
+| `B` | 128 KB Flash memory. |
+| `T` | LQFP package. |
+| `6` | Industrial temperature grade. |
 
-The project is organized using a modular architecture.
 
-- Finite State Machine (FSM)
-- Screen Manager
-- Timer Scheduler
-- Event-driven Message System
-- Object-based Game Engine
+<table align="center">
+  <tr>
+    <td align="center"><img src="resources/images/board/board-view-top-bottom.png" width="900"/></td>
+  </tr>
+</table>
+<p align="center"><strong><em>Figure 2:</em></strong> Board view Top + Bottom </p>
 
-Each game object operates independently and communicates through messages.
+### II - Game Description and Objects
 
----
+<!-- TODO: insert screenshots/GIFs of the main menu and gameplay screen here -->
 
-# 🎯 Controls
+| Object | Bitmap | Description |
+|---|---|---|
+| **Hunter** | `bitmap_fly_hunter_I` / `bitmap_fly_hunter_II` | The player character. Stands at the shooting position and fires arrows. Has a 2-frame idle/shoot animation. |
+| **Arrow** | `bitmap_arrow` | Projectile fired by the Hunter. Travels across the screen and destroys any Fly, Bee, or Boss it hits. |
+| **Fly / Meteoroid** | `bitmap_fly_I` / `II` / `III` | The main enemy wave. Flies in from the right side toward the border on the left. If it crosses the border, the player loses one life. Spawn speed increases as the score rises (Level Up mechanic). |
+| **Bee** | `bitmap_bee_I` / `II` / `III` | A special enemy. Shows a floating `-20` text and penalizes the score when involved, adding risk/reward to the fight. |
+| **Boss** | `bitmap_fly_boss` | A large enemy that spawns once the score passes a threshold (starting at 1000, increasing over time). Has its own HP bar drawn above/below it, shakes when hit, and dies through a 3-frame explosion animation (`bitmap_bang_I/II/III`). |
+| **Boss Bullet** | (filled circle) | Projectile fired back by the Boss at the player. |
+| **Bang (Explosion)** | `bitmap_bang_I` / `II` / `III` | Generic explosion effect played whenever an enemy (Fly/Bee/Boss) is destroyed. |
+| **Border** | (vertical flashing line) | The "kill line" on the left edge of the play area. Enemies crossing it cost the player a life; the border flashes white when the player is hit. |
+| **Heart** | `bitmap_heart` | Displayed at the bottom-left of the HUD to represent the player's remaining lives. |
+| **Score** | text | Displayed at the top-right of the HUD, increases as enemies are destroyed. |
 
-| Button | Function |
-|---------|----------|
-| UP | Move Up |
-| DOWN | Move Down |
-| MODE | Shoot / Select |
+### III - How to Play
 
----
+**Controls:**
+- **MODE** — Shoot an arrow (in-game) / Confirm & adjust a value (in the Settings menu).
+- **UP** — Move the Hunter up / Navigate up in menus.
+- **DOWN** — Move the Hunter down / Navigate down in menus.
+- **UP (long press)** — Jump setting values to their maximum.
+- **DOWN (long press)** — Jump setting values to their minimum.
 
-# 📸 Screenshots
+**Game Mechanics:**
+- Destroy Flies, Bees, and the Boss with arrows to increase your **Score**.
+- Every enemy that crosses the **Border** costs the player **1 life** (see the Heart icons in the HUD).
+- The game ends (**Game Over**) when all lives reach **0**.
+- Difficulty increases progressively: every 300 points, the Fly spawn speed increases (`AR_GAME_LEVEL_UP`).
+- When the score approaches a Boss threshold, a **"WARNING - BOSS INCOMING"** banner flashes with a 3-beep alert before the Boss spawns.
+- Before starting, players can fine-tune the challenge from the **Settings** screen: number of arrows, meteoroid spawn speed, and silent mode (mute sound effects).
 
-## Startup
+<!-- TODO: insert a screenshot of the Game Over screen here -->
 
-<p align="center">
-<img src="docs/images/startup.png" width="300">
-</p>
+### IV - Basic Game Sequence Logic
 
-## Main Menu
+The screens and objects communicate purely through the message/timer system of the AK framework (`SCREEN_ENTRY`, `AR_GAME_TIME_TICK`, `AR_GAME_CHECK_GAME_OVER`, `AR_GAME_RESET`, ...). A high-level flow:
 
-<p align="center">
-<img src="docs/images/menu.png" width="300">
-</p>
+```
+Menu -> [SCREEN_ENTRY] scr_fly_hunter_game
+      -> AR_GAME_TIME_TICK (periodic)
+            -> update Hunter / Arrow / Fly / Bee / Boss / Boss Bullet
+            -> AR_GAME_CHECK_GAME_OVER
+                  -> life-- when an enemy crosses the Border
+                  -> when life == 0 -> post AR_GAME_RESET
+      -> AR_GAME_RESET
+            -> save score, reset all objects
+            -> SCREEN_TRAN -> scr_game_over
+```
 
-## Gameplay
+See [docs/04-design-sequence-runtime.md](./docs/04-design-sequence-runtime.md) for the full Mermaid sequence diagram.
 
-<p align="center">
-<img src="docs/images/gameplay.png" width="300">
-</p>
+## Contact & Support
 
-## Boss Battle
-
-<p align="center">
-<img src="docs/images/boss.png" width="300">
-</p>
-
-## Game Over
-
-<p align="center">
-<img src="docs/images/gameover.png" width="300">
-</p>
-
----
-
-# 🚀 Future Improvements
-
-- More Boss types
-- Multiple stages
-- Power-up system
-- New enemy types
-- Combo score system
-- Particle effects
-- Better AI
-- Multiple difficulty levels
-
----
-
-# 👨‍💻 Author
-
-**Phan Van Tranh**
-
-Embedded Systems Engineering
-
-GitHub:
-
-https://github.com/PhanVanTranh
-
----
-
-# 📄 License
-
-This project is developed for educational purposes.
-
-Feel free to fork, modify, and improve it.
+<!-- TODO: replace with your real contact information -->
+[![GitHub](https://img.shields.io/badge/GitHub-PhanVanTranh-181717?style=flat&logo=github)](https://github.com/PhanVanTranh)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](www.linkedin.com/in/tranh-phan-3b7785311)
+[![Gmail](https://img.shields.io/badge/Gmail-Contact-EA4335?style=flat&logo=gmail&logoColor=white)](phantranh2304@gmail.com)
