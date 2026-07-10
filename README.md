@@ -139,16 +139,103 @@ During gameplay, the player controls a hunter positioned on the left side of the
 
 The screens and objects communicate purely through the message/timer system of the AK framework (`SCREEN_ENTRY`, `AR_GAME_TIME_TICK`, `AR_GAME_CHECK_GAME_OVER`, `AR_GAME_RESET`, ...). A high-level flow:
 
-```
-Menu -> [SCREEN_ENTRY] scr_fly_hunter_game
-      -> AR_GAME_TIME_TICK (periodic)
-            -> update Hunter / Arrow / Fly / Bee / Boss / Boss Bullet
-            -> AR_GAME_CHECK_GAME_OVER
-                  -> life-- when an enemy crosses the Border
-                  -> when life == 0 -> post AR_GAME_RESET
-      -> AR_GAME_RESET
-            -> save score, reset all objects
-            -> SCREEN_TRAN -> scr_game_over
+> **Note:** For a more detailed runtime design, see **Runtime Signal Processing**.
+
+```mermaid
+%%{init: {
+'theme':'base',
+'themeVariables':{
+'primaryColor':'#90CAF9',
+'primaryTextColor':'#000',
+'primaryBorderColor':'#1976D2',
+'lineColor':'#333',
+'actorBorder':'#1976D2',
+'actorBkg':'#81C784',
+'activationBorderColor':'#ffffff',
+'activationBkgColor':'#4FC3F7'
+}}}%%
+
+sequenceDiagram
+    actor Player
+    participant AK
+    participant Screen
+    participant Hunter
+    participant Bullet
+    participant Fly
+    participant Butterfly
+    participant Boss
+    participant BossBullet
+    participant Border
+
+    Player->>Screen: SCREEN_ENTRY
+    activate Screen
+
+    Screen->>Hunter: FH_GAME_HUNTER_SETUP
+    Screen->>Bullet: FH_GAME_BULLET_SETUP
+    Screen->>Fly: FH_GAME_FLY_SETUP
+    Screen->>Butterfly: FH_GAME_BUTTERFLY_SETUP
+    Screen->>Boss: FH_GAME_BOSS_SETUP
+    Screen->>BossBullet: FH_GAME_BOSS_BULLET_SETUP
+    Screen->>Border: FH_GAME_BORDER_SETUP
+
+    Note over Screen: Game State = PLAYING
+
+    loop Every Game Tick
+
+        AK->>Hunter: AR_GAME_TIME_TICK
+        Hunter->>Hunter: Read buttons\nMove Up / Down
+
+        AK->>Bullet: AR_GAME_TIME_TICK
+        Bullet->>Bullet: Shoot & Move
+
+        AK->>Fly: AR_GAME_TIME_TICK
+        Fly->>Fly: Spawn & Move Left
+
+        AK->>Butterfly: AR_GAME_TIME_TICK
+        Butterfly->>Butterfly: Spawn & Move Left
+
+        alt Bullet hits Fly
+            Bullet-->>Fly: Collision
+            Fly-->>Screen: +10 Score
+        end
+
+        alt Bullet hits Butterfly
+            Bullet-->>Butterfly: Collision
+            Butterfly-->>Screen: -10 Score
+        end
+
+        alt Score reaches 500,1000,1500,...
+            Screen->>Boss: Spawn Boss
+        end
+
+        alt Boss Active
+            AK->>Boss: Update Boss
+            Boss->>BossBullet: Fire Bullet
+            BossBullet->>Hunter: Collision Check
+        end
+
+        alt Bullet hits Boss
+            Bullet-->>Boss: Damage
+        end
+
+        alt Boss HP == 0
+            Boss-->>Screen: Boss Defeated
+            Screen-->>Player: Bonus Score
+        end
+
+        alt Enemy reaches Border
+            Fly-->>Border: Cross Border
+            Border-->>Screen: Lose 1 Heart
+        end
+
+        alt Hearts == 0
+            Screen->>AK: AR_GAME_RESET
+            Screen->>Player: GAME OVER
+        end
+
+    end
+
+    deactivate Screen
 ```
 
 See [docs/04-design-sequence-runtime.md](./docs/04-design-sequence-runtime.md) for the full Mermaid sequence diagram.
