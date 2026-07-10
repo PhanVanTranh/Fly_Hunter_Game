@@ -12,8 +12,8 @@
 | [README.md](./README.md) | Project overview (this file) |
 | [docs/01-guide-getting-started.md](./docs/01-guide-getting-started.md) | How to build, flash and run the project |
 | [docs/02-guide-coding-rules.md](./docs/02-guide-coding-rules.md) | Coding conventions used in this project |
-| [docs/03-design-sequence-object.md](./docs/03-design-sequence-object.md) | Sequence diagrams for each game object (Hunter, Arrow, Fly, Bee, Boss...) |
-| [docs/04-design-sequence-runtime.md](./docs/04-design-sequence-runtime.md) | Runtime signal/message flow (Mermaid diagrams) |
+| [docs/03-design-sequence-object.md](./docs/03-design-sequence-object.md) | Sequence diagrams for each game object |
+| [docs/04-design-sequence-runtime.md](./docs/04-design-sequence-runtime.md) | Runtime signal/message flow |
 
 
 ## Introduction                            
