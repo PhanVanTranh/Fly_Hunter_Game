@@ -94,7 +94,7 @@ When the game starts, the Main Menu is displayed with the following options:
 - **Exit:** Return to the idle screen.
 
 
-<p align="center"> <img src="resources/images/screens/scr_game_fly_hunter.png" width="320"><br> <em><b>Figure 4.</b> Gameplay Screen</em> </p>
+<p align="center"> <img src="resources/images/screens/scr_game_fly_hunter.png" width="320"><br> <em><b>Figure 3.</b> Gameplay Screen</em> </p>
 
 During gameplay, the player controls a hunter positioned on the left side of the screen. The objective is to shoot incoming enemies while avoiding penalties.
 
