@@ -1,149 +1,410 @@
-# EEPROM Data Storage
+# Design Sequence - Object
 
-This document describes how Archery Game stores persistent data in EEPROM, including game settings and score data.
+This document describes the responsibilities, states, and interactions of every object in the **Fly Hunter Game**. Each object is implemented independently and communicates through the AK Framework message system.
 
-## I. Overview
+---
 
-EEPROM is used for data that must remain valid after power-off. In Archery Game, EEPROM stores:
+# I. Hunter
 
-| Data block | Purpose | Source file |
-|---|---|---|
-| Game setting | Stores sound mode, number of arrows, arrow speed, and initial meteoroid speed. | `application/sources/app/app_eeprom.h` |
-| Score data | Stores current score and the top 3 highest scores. | `application/sources/app/app_eeprom.h` |
+The Hunter is the player's character.
 
-Each EEPROM record is protected by a `Magic number` and a `Checksum`. This prevents the firmware from using invalid, corrupted, or unrelated EEPROM data.
+## Responsibilities
 
-## II. EEPROM Address Map
+- Move vertically.
+- Shoot arrows.
+- Detect collisions with enemies.
+- Lose lives when an enemy reaches the left border.
 
-| Name | Address | Description |
-|---|---:|---|
-| `EEPROM_START_ADDR` | `0x0000` | Start address of the EEPROM area. |
-| `EEPROM_END_ADDR` | `0x1000` | End address of the EEPROM area. |
-| `EEPROM_SCORE_START_ADDR` | `0x0010` | Start address for score data. |
-| `EEPROM_SCORE_PLAY_ADDR` | `0x00FA` | Reserved score-related address. |
-| `EEPROM_SETTING_START_ADDR` | `0x0100` | Start address for game setting data. |
+## States
 
-The Archery Game EEPROM Magic number is:
-
-```cpp
-#define AR_GAME_EEPROM_MAGIC_NUMBER ((uint32_t)0x123123BB)
+```
+IDLE
+MOVE_UP
+MOVE_DOWN
+SHOOT
 ```
 
-## III. Record Format
+## Receives
 
-Each EEPROM record uses the following layout:
+```
+SCREEN_ENTRY
+AR_GAME_TIME_TICK
+KEY_UP
+KEY_DOWN
+KEY_OK
+```
+
+## Sends
+
+```
+ARROW_FIRE
+```
+
+---
+
+# II. Arrow
+
+The Arrow is generated whenever the player shoots.
+
+## Responsibilities
+
+- Move from left to right.
+- Detect collision with enemies.
+- Destroy itself after hitting an object or leaving the screen.
+
+## States
+
+```
+INACTIVE
+ACTIVE
+DESTROY
+```
+
+## Receives
+
+```
+ARROW_FIRE
+AR_GAME_TIME_TICK
+```
+
+## Sends
+
+```
+FLY_HIT
+BUTTERFLY_HIT
+BOSS_HIT
+```
+
+---
+
+# III. Fly
+
+Fly is the primary enemy.
+
+## Responsibilities
+
+- Spawn periodically.
+- Move toward the Hunter.
+- Increase score when destroyed.
+
+## States
+
+```
+HIDDEN
+ACTIVE
+DEAD
+```
+
+## Receives
+
+```
+FLY_SETUP
+AR_GAME_TIME_TICK
+```
+
+## Sends
+
+```
+PLAYER_DAMAGE
+ADD_SCORE(+10)
+```
+
+---
+
+# IV. Butterfly
+
+Butterfly is a special object that should **NOT** be shot.
+
+## Responsibilities
+
+- Spawn occasionally.
+- Move toward the player.
+- Reduce score if destroyed.
+
+## States
+
+```
+HIDDEN
+ACTIVE
+DEAD
+```
+
+## Receives
+
+```
+BUTTERFLY_SETUP
+AR_GAME_TIME_TICK
+```
+
+## Sends
+
+```
+SUB_SCORE(-20)
+```
+
+---
+
+# V. Boss
+
+Boss appears every fixed score milestone.
+
+Current implementation
+
+```
+500 Points
+1000 Points
+1500 Points
+2000 Points
+...
+```
+
+## Responsibilities
+
+- Move toward the Hunter.
+- Shoot boss bullets.
+- Receive multiple hits before dying.
+- Reward player when defeated.
+
+## States
+
+```
+HIDDEN
+WARNING
+ACTIVE
+ATTACK
+DEAD
+```
+
+## Receives
+
+```
+BOSS_SETUP
+AR_GAME_TIME_TICK
+BOSS_HIT
+```
+
+## Sends
+
+```
+BOSS_FIRE
+ADD_SCORE(+100)
+```
+
+---
+
+# VI. Boss Bullet
+
+Boss Bullet is fired by the Boss.
+
+## Responsibilities
+
+- Travel toward the player.
+- Damage the player on collision.
+
+## States
+
+```
+INACTIVE
+ACTIVE
+DESTROY
+```
+
+## Receives
+
+```
+BOSS_FIRE
+AR_GAME_TIME_TICK
+```
+
+## Sends
+
+```
+PLAYER_DAMAGE
+```
+
+---
+
+# VII. Explosion
+
+Explosion is a temporary visual effect.
+
+## Responsibilities
+
+- Display destruction animation.
+- Automatically disappear.
+
+## States
+
+```
+ACTIVE
+FINISHED
+```
+
+## Receives
+
+```
+OBJECT_DESTROY
+AR_GAME_TIME_TICK
+```
+
+---
+
+# VIII. Heart
+
+Heart represents the player's remaining lives.
+
+## Responsibilities
+
+- Display current HP.
+- Update after damage.
+
+## States
+
+```
+3 Hearts
+2 Hearts
+1 Heart
+0 Heart
+```
+
+## Receives
+
+```
+PLAYER_DAMAGE
+GAME_RESET
+```
+
+---
+
+# IX. Score
+
+Score records the player's performance.
+
+## Responsibilities
+
+- Increase after destroying Fly.
+- Decrease after shooting Butterfly.
+- Increase after defeating Boss.
+- Display current score.
+
+## Receives
+
+```
+ADD_SCORE
+SUB_SCORE
+GAME_RESET
+```
+
+---
+
+# X. Border
+
+Border defines the playable area.
+
+## Responsibilities
+
+- Detect enemies leaving the screen.
+- Trigger player damage.
+- Remove objects outside the screen.
+
+## Receives
+
+```
+AR_GAME_TIME_TICK
+```
+
+## Sends
+
+```
+PLAYER_DAMAGE
+OBJECT_REMOVE
+```
+
+---
+
+# XI. Object Interaction
+
+The following diagram summarizes the interactions between gameplay objects.
 
 ```text
-+----------------------+----------------------+----------------------+
-| Magic number         | Data                 | Checksum             |
-| 4 bytes              | payload struct       | 1 byte               |
-+----------------------+----------------------+----------------------+
+Hunter
+ │
+ ├─────────────► Arrow
+ │                  │
+ │                  ├────────► Fly
+ │                  │              │
+ │                  │              └──► +10 Score
+ │                  │
+ │                  ├────────► Butterfly
+ │                  │              │
+ │                  │              └──► -20 Score
+ │                  │
+ │                  └────────► Boss
+ │                                 │
+ │                                 ├──► Boss Bullet
+ │                                 │
+ │                                 └──► +100 Score
+ │
+ └────────────► Heart (Life System)
+
+Fly/Boss/Boss Bullet
+        │
+        ▼
+Border
+        │
+        ▼
+Player Damage
 ```
 
-| Field | Description |
-|---|---|
-| `Magic number` | Identifies data that belongs to Archery Game. |
-| `Data` | The payload struct that needs to be stored. |
-| `Checksum` | 8-bit additive checksum from `Magic number` through the end of `Data`. |
+---
 
-## IV. Stored Data Structures
+# XII. Object Life Cycle
 
-### 4.1 Game Setting
+```
+Setup
 
-| Field | Meaning |
-|---|---|
-| `silent` | Sound on/off setting. |
-| `num_arrow` | Number of available arrows. |
-| `arrow_speed` | Arrow movement speed. |
-| `meteoroid_speed` | Initial meteoroid movement speed. |
+↓
 
-### 4.2 Score Data
+Hidden
 
-| Field | Meaning |
-|---|---|
-| `score_now` | Score of the latest game session. |
-| `score_1st` | Highest score. |
-| `score_2nd` | Second highest score. |
-| `score_3rd` | Third highest score. |
+↓
 
-## V. Read And Write Mechanism
+Spawn
 
-### 5.1 Read Data From EEPROM
+↓
 
-Step 1: Read the full EEPROM record from the configured address.
+Active
 
-```cpp
-eeprom_read(address, (uint8_t *)&eeprom_data, sizeof(eeprom_data));
+↓
+
+Collision
+
+↓
+
+Explosion
+
+↓
+
+Remove
+
+↓
+
+Respawn
 ```
 
-Step 2: Check the EEPROM driver result.
+---
 
-If the driver does not return `EEPROM_DRIVER_OK`, the data is treated as invalid.
+# XIII. Summary
 
-Step 3: Check the `Magic number`.
-
-The record is valid for Archery Game only when its Magic number matches:
-
-```cpp
-AR_GAME_EEPROM_MAGIC_NUMBER
-```
-
-Step 4: Recalculate the checksum.
-
-The checksum is calculated from the `Magic number` through the end of the payload data.
-
-Step 5: Decide which data to use.
-
-| Condition | Result |
-|---|---|
-| Driver result is OK, Magic number is correct, and checksum matches | Use EEPROM payload data. |
-| Any check fails | Use default data. |
-
-### 5.2 Write Data To EEPROM
-
-Step 1: Copy the latest application data into the EEPROM payload.
-
-For score data, the payload is `ar_game_score_t`. For setting data, the payload is `ar_game_setting_t`.
-
-Step 2: Write the Archery Game Magic number into the record.
-
-```cpp
-eeprom_data.magic_number = AR_GAME_EEPROM_MAGIC_NUMBER;
-```
-
-Step 3: Calculate the checksum for the record.
-
-The checksum covers the `Magic number` and payload data.
-
-Step 4: Store the checksum at the end of the EEPROM record.
-
-```cpp
-eeprom_data.check_sum = calculated_checksum;
-```
-
-Step 5: Write the complete record to EEPROM.
-
-| Write target | EEPROM address | Data wrapper |
-|---|---:|---|
-| Score data | `EEPROM_SCORE_START_ADDR` | `Magic number` + `ar_game_score_t` + `Checksum` |
-| Game setting | `EEPROM_SETTING_START_ADDR` | `Magic number` + `ar_game_setting_t` + `Checksum` |
-
-## VI. Related APIs
-
-```cpp
-extern bool ar_game_score_read(ar_game_score_t* data);
-extern bool ar_game_score_write(ar_game_score_t* data);
-
-extern bool ar_game_setting_read(ar_game_setting_t* data);
-extern bool ar_game_setting_write(ar_game_setting_t* data);
-```
-
-## VII. Code References
-
-| Area | File |
-|---|---|
-| EEPROM address and data type definitions | `application/sources/app/app_eeprom.h` |
-| EEPROM read/write implementation | `application/sources/app/app_eeprom.cpp` |
-| EEPROM driver wrapper | `application/sources/driver/eeprom/eeprom.cpp` |
-| Game setting screen usage | `application/sources/app/screens/scr_game_setting.cpp` |
-| Score save flow | `application/sources/app/screens/scr_archery_game.cpp` |
+| Object | Purpose |
+|----------|---------|
+| Hunter | Player character |
+| Arrow | Player projectile |
+| Fly | Main enemy |
+| Butterfly | Penalty object |
+| Boss | High-health enemy |
+| Boss Bullet | Boss projectile |
+| Explosion | Hit effect |
+| Heart | Player life |
+| Score | Score system |
+| Border | Game boundary |
