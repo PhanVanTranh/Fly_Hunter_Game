@@ -18,7 +18,7 @@
 
 ## Introduction                            
 
-**Fly Hunter** is a 2D shooting mini-game built on the AK Embedded Base Kit, inspired by classic side-scrolling shooters. The player controls a hunter standing at a fixed border on the left side of the screen, aiming and shooting arrows at incoming flies, bees, and meteoroids before they cross the border. Every few hundred points, a **Boss** appears with its own HP bar and bullet attacks, raising the difficulty and testing the player's reflexes.
+**Fly Hunter** is a 2D shooting mini-game built on the AK Embedded Base Kit, inspired by classic side-scrolling shooters. The player controls a hunter standing at a fixed border on the left side of the screen, aiming and shooting arrows at incoming flies, butterflies before they cross the border. Every few hundred points, a **Boss** appears with its own HP bar and bullet attacks, raising the difficulty and testing the player's reflexes.
 
 Like other embedded games built on the AK platform, Fly Hunter is also a practical showcase of embedded system design concepts:
 - **System design** — screens and game objects organized as independent, event-driven modules (UML-style).
