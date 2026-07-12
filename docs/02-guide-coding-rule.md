@@ -1,470 +1,157 @@
 # Coding Rule
 
-> This document defines the coding conventions and project architecture used in the **Fly Hunter Game**. Following these rules keeps the source code consistent, modular, and easy to maintain.
+> This document defines the coding conventions and project architecture actually used in the **Fly Hunter Game** source code. Following these rules keeps the codebase consistent, modular, and easy to maintain.
 
 ---
 
-# 1. Project Structure
+## 1. Architecture: Message-Driven, Not OOP
 
-The project is organized into independent modules.
+Fly Hunter is **not** built around per-object `init()/update()/draw()` classes. Every screen and every game object is a single **message handler function** that reacts to signals posted by the AK framework's task/timer/message system:
 
-```
-Application/
-├── app_fly_hunter/
-│   ├── fly_hunter_game.c
-│   ├── fly_hunter_game.h
-│   ├── fly.c
-│   ├── fly.h
-│   ├── butterfly.c
-│   ├── butterfly.h
-│   ├── boss.c
-│   ├── boss.h
-│   ├── hunter.c
-│   ├── hunter.h
-│   ├── arrow.c
-│   ├── arrow.h
-│   ├── explosion.c
-│   ├── explosion.h
-│   ├── border.c
-│   ├── border.h
-│   ├── bitmap.c
-│   └── bitmap.h
+```cpp
+void ar_game_fly_handle(ak_msg_t* msg) {
+    switch (msg->sig) {
+    case AR_GAME_FLY_SETUP:      /* ... */ break;
+    case AR_GAME_FLY_RUN:        /* ... */ break;
+    case AR_GAME_FLY_DETONATOR:  /* ... */ break;
+    case AR_GAME_FLY_RESET:      /* ... */ break;
+    default: break;
+    }
+}
 ```
 
-Each module is responsible for only **one game object**.
+There is no `fly_init()`, `fly_update()`, or `fly_draw()` API — everything happens inside the `switch` on `msg->sig`, and objects are advanced by the screen posting them a signal every game tick, not by being polled.
 
----
-
-# 2. Module Design Rule
-
-Every game object follows the same structure.
-
-Example:
+## 2. Real Project Structure
 
 ```
-fly.c
-fly.h
+application/sources/app/
+├── game/fly_hunter_game/
+│   ├── ar_game_fly_hunter.cpp / .h   # Hunter
+│   ├── ar_game_arrow.cpp / .h        # Arrow
+│   ├── ar_game_fly.cpp / .h          # Fly
+│   ├── ar_game_butterfly.cpp / .h    # Butterfly
+│   ├── ar_game_boss.cpp / .h         # Boss
+│   ├── ar_game_boss_bullet.cpp / .h  # Boss Bullet
+│   ├── ar_game_bang.cpp / .h         # Explosion effect
+│   └── ar_game_border.cpp / .h       # Border / life & level-up checks
+└── screens/
+    ├── scr_startup.cpp / .h
+    ├── scr_menu_game.cpp / .h
+    ├── scr_game_setting.cpp / .h
+    ├── scr_fly_hunter_game.cpp / .h  # orchestrates every object above
+    ├── scr_game_over.cpp / .h
+    ├── scr_charts_game.cpp / .h
+    ├── scr_idle.cpp / .h
+    └── screens_bitmap.cpp / .h       # all bitmap byte arrays
 ```
 
-```
-boss.c
-boss.h
-```
+Each object module is responsible for **one game object only**, and is driven entirely by the screen that owns it (`scr_fly_hunter_game.cpp`).
 
-```
-hunter.c
-hunter.h
-```
+## 3. Naming Convention
 
-Each module contains
+| Prefix | Meaning | Example |
+| --- | --- | --- |
+| `scr_` | Screen module (dynamic view + handler) | `scr_fly_hunter_game.cpp` |
+| `ar_game_` | Game object module | `ar_game_border.cpp`, `ar_game_butterfly.cpp` |
+| `AR_GAME_` | Game-level constants / message signals | `AR_GAME_CHECK_GAME_OVER` |
+| `AC_DISPLAY_` | Display/system-level signals | `AC_DISPLAY_BUTTON_MODE_PRESSED` |
 
-- Object data
-- Initialization
-- Update logic
-- Drawing routine
-- Collision detection
-- Reset function
+**Variables:** lowercase with underscores (`player_life`, `ar_game_score`, `warning_timer`).  
+**Constants:** uppercase with underscores (`PLAYER_MAX_LIFE`, `AR_GAME_LEVEL_UP_SCORE`).  
+**Message signals:** `AR_GAME_<OBJECT>_<ACTION>` (`AR_GAME_FLY_HUNTER_SETUP`, `AR_GAME_BOSS_BULLET_FIRE`). There is **no** `FH_GAME_*` prefix anywhere in the codebase — any doc or diagram using that prefix is inaccurate and should be corrected.
 
-This design improves readability and simplifies debugging.
+## 4. Screen Module Structure
 
----
+Every screen implements exactly 3 parts:
 
-# 3. Naming Convention
+```cpp
+// 1. Dynamic view struct - links a screen to its render function
+view_dynamic_t dyn_view_item_xxx = { {ITEM_TYPE_DYNAMIC}, view_scr_xxx };
 
-## Variables
+// 2. Screen struct - registered with the FSM
+view_screen_t scr_xxx = { &dyn_view_item_xxx, ITEM_NULL, ITEM_NULL, .focus_item = 0 };
 
-Use lowercase with underscore.
-
-```c
-player_score
-boss_health
-spawn_timer
-current_wave
+// 3. Message handler - reacts to SCREEN_ENTRY / button / timer signals
+void scr_xxx_handle(ak_msg_t* msg) { switch (msg->sig) { ... } }
 ```
 
----
+**Rule:** the view function (`view_scr_xxx`) that draws to the LCD **must always end with `view_render.update();`**. Forgetting this call is a real bug pattern in this codebase — the content is drawn into the buffer but never pushed to the physical screen, so it silently "does nothing" until some unrelated event happens to call `update()` afterwards.
 
-## Constants
+**Rule:** whenever a screen needs to render immediately after a state change (button press, `SCREEN_ENTRY`, etc.), call its view function explicitly. Do not assume the framework auto-renders on screen transition.
 
-Use uppercase.
+**Rule:** when transitioning to a follow-up screen (e.g. Game Over) from inside another screen's handler, call `SCREEN_TRAN` directly at that point rather than delaying it with an intermediate timer-driven state. `scr_fly_hunter_game.cpp` transitions to `scr_game_over` immediately inside its `AR_GAME_RESET` handler for this reason — there is deliberately no intermediate "result" screen.
 
-```c
-MAX_FLY
-MAX_BOSS_BULLET
-BOSS_APPEAR_SCORE
-PLAYER_MAX_HEALTH
+## 5. Object Module Structure
+
+Every game object (Fly, Butterfly, Boss, Arrow, ...) is handled purely through messages — objects never call each other's functions directly. Communication always goes through:
+
+```cpp
+task_post_pure_msg(AR_GAME_FLY_ID, AR_GAME_FLY_RUN);
 ```
 
----
-
-## Functions
-
-Function names follow:
+A typical object lifecycle:
 
 ```
-<object>_<action>()
+AR_GAME_<OBJECT>_SETUP    // called once on SCREEN_ENTRY
+AR_GAME_<OBJECT>_RUN      // called every AR_GAME_TIME_TICK
+AR_GAME_<OBJECT>_DETONATOR (or similar) // collision checks
+AR_GAME_<OBJECT>_RESET    // called on AR_GAME_RESET
 ```
 
-Example
+**Rule:** never post the same reset/transition message twice for a single event. Duplicate `task_post_pure_msg` calls for the same signal (e.g. `AR_GAME_RESET`) can cause a handler to run twice, leading to double score-saving or double screen transitions. `ar_game_border.cpp` posts `AR_GAME_RESET` **exactly once** when `player_life` reaches 0 — keep any new life-loss path (Boss, Boss Bullet, or future objects) consistent with that rule.
 
-```c
-fly_init()
-fly_update()
-fly_draw()
+**Rule:** be aware that **more than one object can independently cost the player a life** in this game — a Fly reaching the Border, the Boss reaching the Border, and a Boss Bullet hitting the Hunter are three separate code paths. Each must guard against firing `AR_GAME_RESET` more than once, and must not assume it is the only source of life loss.
 
-boss_init()
-boss_update()
-boss_fire()
+## 6. Timers
 
-hunter_move()
-hunter_draw()
+- Use `TIMER_PERIODIC` for continuously repeating game ticks (`AR_GAME_TIME_TICK`).
+- Use `TIMER_ONE_SHOT` for one-time delayed events (e.g. showing the idle screen, or the Boss Bullet's self-rescheduling `AR_GAME_BOSS_BULLET_FIRE` timer).
+- Always call `timer_remove_attr()` for a timer's signal when leaving the state that owns it, to avoid stale timers firing after a screen transition.
 
-arrow_update()
-arrow_reset()
-```
+## 7. Bitmap Management
 
----
-
-## Boolean Variables
-
-Use prefixes
+All bitmap resources are declared in one place:
 
 ```
-is_
-has_
-can_
+application/sources/app/screens/screens_bitmap.h / .cpp
 ```
 
-Example
+Gameplay object files (`ar_game_*.cpp`) only *reference* bitmap symbols (`bitmap_fly_I`, `bitmap_butterfly_I`, `bitmap_heart`, ...) when drawing — the raw byte arrays never live inside gameplay logic files.
 
-```c
-is_alive
-has_spawned
-can_fire
+## 8. Memory Management
+
+The project does **not** use dynamic memory allocation. Avoid `malloc()` / `calloc()` / `free()`. All game objects use fixed-size arrays sized by constants such as:
+
+```cpp
+#define NUM_FLYs           (3)
+#define MAX_NUM_ARROW       AR_GAME_SETTING_NUM_ARROW_MAX
+#define NUM_BOSS_BULLET     (...)
 ```
 
----
+This is standard practice for embedded systems with limited RAM (16 KB on this board).
 
-# 4. Global Variable Rule
+## 9. Score Rule
 
-Avoid unnecessary global variables.
-
-Only game-wide data should be global.
-
-Example
-
-```c
-score
-
-game_state
-
-high_score
-```
-
-Object-specific variables should remain inside their own modules.
-
-Example
-
-```c
-boss_health
-
-boss_fire_timer
-
-fly_speed
-```
-
----
-
-# 5. Header File Rule
-
-Each module exposes only necessary interfaces.
-
-Example
-
-```c
-void fly_init(void);
-void fly_update(void);
-void fly_draw(void);
-```
-
-Do not expose internal variables unless required.
-
----
-
-# 6. Function Length
-
-Each function should perform only one task.
-
-Good
-
-```c
-boss_update()
-
-boss_draw()
-
-boss_fire()
-
-boss_reset()
-```
-
-Avoid writing one large function containing every behavior.
-
----
-
-# 7. Game Update Order
-
-Every game tick updates objects in a fixed order.
-
-```
-Player
-
-↓
-
-Arrow
-
-↓
-
-Fly
-
-↓
-
-Butterfly
-
-↓
-
-Boss
-
-↓
-
-Boss Bullet
-
-↓
-
-Explosion
-
-↓
-
-Collision Check
-
-↓
-
-HUD
-
-↓
-
-Display Refresh
-```
-
-Keeping the update order fixed ensures deterministic gameplay.
-
----
-
-# 8. Collision Detection Rule
-
-Each object is responsible for checking collisions involving itself.
-
-Example
-
-```
-Arrow
-    ↓
-Check collision with Fly
-
-Arrow
-    ↓
-Check collision with Butterfly
-
-Arrow
-    ↓
-Check collision with Boss
-```
-
-Avoid placing every collision check inside one huge function.
-
----
-
-# 9. Bitmap Management
-
-All bitmap resources are stored separately.
-
-```
-bitmap.c
-
-bitmap.h
-```
-
-Each sprite has its own bitmap array.
-
-Example
-
-```c
-hunter_bitmap
-
-fly_bitmap
-
-butterfly_bitmap
-
-boss_bitmap
-
-heart_bitmap
-
-explosion_bitmap
-```
-
-Gameplay logic should never contain bitmap data directly.
-
----
-
-# 10. State Machine
-
-The game is implemented using a finite state machine.
-
-```
-MENU
-
-↓
-
-PLAY
-
-↓
-
-GAME OVER
-
-↓
-
-MENU
-```
-
-Each screen manages its own behavior independently.
-
----
-
-# 11. Score Rule
-
-Only specific events modify the score.
+Only specific, well-defined events modify `ar_game_score`:
 
 | Event | Score |
-|--------|------:|
-| Fly destroyed | +10 |
-| Butterfly destroyed | -10 |
-| Boss defeated | +100 |
+| --- | ---: |
+| Fly destroyed | **+10** |
+| Butterfly destroyed | **-20** |
+| Boss defeated | **+300** |
 
-The score should never be modified outside gameplay logic.
+## 10. Comments
 
----
+- Use `APP_DBG_SIG("...")` at the top of every handled message case for traceability during debugging.
+- Keep large ASCII-art section headers (`/**** ... ****/`) only for major view-drawing blocks, to keep files easy to scan.
+- Prefer explaining **why**, not **what** — the message-driven `switch` structure already makes "what happens on this signal" self-evident.
 
-# 12. Boss Rule
+## 11. Embedded Development Principles
 
-The boss appears periodically based on the player's score.
+- Message-driven, not polled — objects react to signals, they are not ticked via direct function calls.
+- Fixed-size, statically allocated object arrays.
+- Screens own their objects; objects never reach into other objects' state directly.
+- Persistent data (settings, scores) always goes through the EEPROM read/write helpers in `app_eeprom.cpp`, never raw driver calls from gameplay code.
 
-```
-500 points
-
-↓
-
-1000 points
-
-↓
-
-1500 points
-
-↓
-
-...
-```
-
-Only one boss may exist at a time.
-
-When the boss is defeated
-
-- Boss disappears
-- Explosion animation plays
-- Player receives bonus points
-- Boss spawn counter advances to the next threshold
-
----
-
-# 13. Memory Management
-
-The project does **not** use dynamic memory allocation.
-
-Avoid using
-
-```c
-malloc()
-
-calloc()
-
-free()
-```
-
-All game objects use fixed-size arrays.
-
-Example
-
-```c
-Fly fly[MAX_FLY];
-
-BossBullet bullet[MAX_BOSS_BULLET];
-```
-
-This approach is suitable for embedded systems with limited RAM.
-
----
-
-# 14. Comment Style
-
-Use comments to explain **why**, not **what**.
-
-Good
-
-```c
-// Spawn the boss every 600 score to increase difficulty.
-```
-
-Avoid
-
-```c
-// Increase score by 10.
-score += 10;
-```
-
-The code itself is already clear.
-
----
-
-# 15. Coding Style
-
-Use consistent indentation.
-
-```c
-if(condition)
-{
-    update();
-}
-else
-{
-    reset();
-}
-```
-
-Keep one statement per line.
-
-Avoid deeply nested conditions whenever possible.
-
----
-
-# 16. Embedded Development Principles
-
-The project follows common embedded software practices:
-
-- Modular programming
-- Event-driven architecture
-- Timer-based game loop
-- Fixed memory allocation
-- Low RAM usage
-- High readability
-- Easy maintenance
-- Reusable object modules
-
-These principles make the project easier to expand with additional enemies, power-ups, levels, or gameplay mechanics in the future.
+These principles keep the codebase easy to extend with new enemies, power-ups, or screens without destabilizing existing behavior.
