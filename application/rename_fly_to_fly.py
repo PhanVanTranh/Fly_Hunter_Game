@@ -2,7 +2,7 @@ import os
 import re
 from pathlib import Path
 
-root = Path(r'd:\Intern_FTEL\FLy_Hunter_game\Game_example\Workspace\Sources\fly-hunter-game\application')
+root = Path(r'd:\Intern_FTEL\Fly_Hunter_game\Game_example\Workspace\Sources\fly-hunter-game\application')
 
 skip_exts = {'.bin', '.o', '.a', '.elf', '.hex', '.map', '.lst', '.obj', '.out', '.pdf', '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.ico', '.zip'}
 

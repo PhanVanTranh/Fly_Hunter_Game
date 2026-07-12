@@ -21,7 +21,7 @@ FLASH_BASE_ADDR_VAL = 0x08000000
 NAME_MODULE = fly_hunter-game
 PROJECT = $(NAME_MODULE)
 
-GCC_PATH		= D:/Intern_FTEL/FLy_Hunter_game/Game_example/Workspace/Tools/gcc-arm-none-eabi-10.3-2021.10
+GCC_PATH		= D:/Intern_FTEL/Fly_Hunter_game/Game_example/Workspace/Tools/gcc-arm-none-eabi-10.3-2021.10
 PROGRAMER_PATH		= $(HOME)/Workspace/Tools/stm_programer/bin
 OPENOCD_CFG_PATH	= /usr/local/share/openocd/scripts/board/stm32ldiscovery.cfg
 

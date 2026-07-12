@@ -39,10 +39,10 @@ void view_scr_startup()
 void view_startup_fly_hunter()
 {
 
-    view_render.setTextSize(1);
+    view_render.setTextSize(2);
     view_render.setTextColor(WHITE);
 
-    view_render.setCursor(35,2);
+    view_render.setCursor(4,2);
     view_render.print("FLY HUNTER");
 
     //------------------------------------
@@ -51,13 +51,14 @@ void view_startup_fly_hunter()
 
     view_render.drawBitmap(
         44,
-        12,
+        16,
         bitmap_fly_hunter_logo,
         SIZE_BITMAP_FLY_HUNTER_LOGO_X,
         SIZE_BITMAP_FLY_HUNTER_LOGO_Y,
         WHITE);
-
-    view_render.setCursor(30,56);
+	
+    view_render.setTextSize(1);
+    view_render.setCursor(25,56);
     view_render.print("EMBEDDED GAME");
 }
 
