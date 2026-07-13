@@ -2,6 +2,9 @@
 
 <div align="center">
   <video src="https://github.com/user-attachments/assets/e24911bf-5073-4d07-a8e8-738927585d1b" controls width="480"></video>
+
+![Profile Views](https://komarev.com/ghpvc/?username=PhanVanTranh&color=007ec6&style=flat-square)
+
 </div>                            
 
 ---
