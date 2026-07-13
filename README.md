@@ -122,13 +122,15 @@ During gameplay, the player controls a hunter positioned on the left side of the
 - **DOWN** — Move the Hunter down / Navigate down in menus.
 
 **Game Mechanics:**  
-- Destroy Flies, Bees, and the Boss with arrows to increase your **Score**.
-- Every enemy that crosses the **Border** costs the player **1 life** (see the Heart icons in the HUD).
+- Destroy Flies and the Boss with arrows to increase your **Score** (+10 per Fly, +300 per Boss).
+- Shooting a **Butterfly** costs **-20 score** — treat it as a decoy to avoid, not a target.
+- Every Fly that crosses the **Border** costs the player **1 life** out of **3** (see the Heart icons in the HUD). The Boss reaching the Border, or a Boss Bullet hitting the Hunter, also costs a life.
 - The game ends (**Game Over**) when all lives reach **0**.
-- Difficulty increases progressively: every 300 points, the Fly spawn speed increases (`AR_GAME_LEVEL_UP`).
-- When the score approaches a Boss threshold, a **"WARNING - BOSS INCOMING"** banner flashes with a 3-beep alert before the Boss spawns.
-- Before starting, players can fine-tune the challenge from the **Settings** screen: number of arrows, meteoroid spawn speed, and silent mode (mute sound effects).
-
+- Difficulty increases progressively: every 300 points, the Fly spawn speed increases.
+- A Boss spawns once the score reaches **500**, and again every **+500** points after that. When the threshold approaches, a **"WARNING - BOSS INCOMING"** banner flashes with a 3-beep alert before the Boss spawns.
+- Defeating a Boss rewards **+300 score** and **+1 extra life** (capped at 3), and increases the Boss's HP for the next encounter.
+- Before starting, players can fine-tune the challenge from the **Settings** screen: number of arrows, Fly speed, and silent mode (mute sound effects).
+- 
 <table align="center">
   <tr>
     <td align="center"><img src="resources/images/screens/scr_game_over_2_4x.png" alt="zomwar game over screen 1" width="480"/></td>
