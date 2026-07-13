@@ -127,7 +127,7 @@ During gameplay, the player controls a hunter positioned on the left side of the
 - The game ends (**Game Over**) when all lives reach **0**.
 - Difficulty increases progressively: every 300 points, the Fly spawn speed increases.
 - A Boss spawns once the score reaches **500**, and again every **+500** points after that. When the threshold approaches, a **"WARNING - BOSS INCOMING"** banner flashes with a 3-beep alert before the Boss spawns.
-- Defeating a Boss rewards **+300 score** and **+1 extra life** (capped at 3), and increases the Boss's HP for the next encounter.
+- Defeating a Boss rewards **+300 score** and **+1 extra life** (capped at 3), and increases the Boss's Health Points (HP) for the next encounter.
 - Before starting, players can fine-tune the challenge from the **Settings** screen: number of arrows, Fly speed, and silent mode (mute sound effects).
 
 <table align="center">
