@@ -36,8 +36,6 @@ sequenceDiagram
 
 ## II. Game Start — Object Initialization
 
-Figure below shows the initialization sequence right after the player selects **Start Game** from the Main Menu. During this stage, the screen initializes every gameplay object and starts the periodic game-tick timer.
-
 ```mermaid
 sequenceDiagram
     autonumber
@@ -73,8 +71,6 @@ sequenceDiagram
 ```
 
 ## III. Main Gameplay Loop
-
-Every `AR_GAME_TIME_TICK` (periodic timer), the screen drives all objects in a fixed order, then checks for level-up and game-over conditions.
 
 ```mermaid
 sequenceDiagram
@@ -183,8 +179,6 @@ sequenceDiagram
     GameOver->>GameOver: SCREEN_ENTRY -> view_scr_game_over() -> view_render.update()
     Note over GameOver: shows "GAME OVER" + score + Restart / Chart / Home icons immediately
 ```
-
-> **Important:** the transition to `scr_game_over` happens **directly inside** the `AR_GAME_RESET` handler — there is no intermediate "result" screen, and no delay timer involved. `view_render.update()` is called synchronously inside `SCREEN_ENTRY`, so the score screen is guaranteed to render the instant the last life is lost.
 
 ## VI. From Game Over
 
