@@ -13,8 +13,8 @@
 
 #define RANDOM_BUTTERFLY_Y() (rand() % 40)
 
-#define RANDOM_BUTTERFLY_ACTION_IMAGE() \
-(rand() % AR_GAME_BUTTERFLY_ACTION_IMAGE_3 + AR_GAME_BUTTERFLY_ACTION_IMAGE_1)
+// #define RANDOM_BUTTERFLY_ACTION_IMAGE() \
+// (rand() % AR_GAME_BUTTERFLY_ACTION_IMAGE_3 + AR_GAME_BUTTERFLY_ACTION_IMAGE_1)
 
 #define RANDOM_BUTTERFLY_Y_TOP()      (rand() % 4)
 #define RANDOM_BUTTERFLY_Y_MIDDLE()   (16 + rand() % 4)
@@ -112,8 +112,8 @@ void ar_game_butterfly_handle(ak_msg_t *msg) {
             butterfly[i].visible = BLACK;
             butterfly[i].show_minus20 = false;
             butterfly[i].minus20_timer = 0;
-            butterfly[i].action_image = RANDOM_BUTTERFLY_ACTION_IMAGE();
-            
+            //butterfly[i].action_image = RANDOM_BUTTERFLY_ACTION_IMAGE();
+            butterfly[i].action_image = AR_GAME_BUTTERFLY_ACTION_IMAGE_1;
             // On first game start, butterflies appear randomly between 1 and 5 seconds
             butterfly[i].spawn_delay = (rand() % (4 * BUTTERFLY_TICK_PER_SECOND)) + BUTTERFLY_TICK_PER_SECOND; 
         }
@@ -161,7 +161,8 @@ void ar_game_butterfly_handle(ak_msg_t *msg) {
                     butterfly_random_position(i);
 
                     butterfly[i].visible = WHITE;
-                    butterfly[i].action_image = RANDOM_BUTTERFLY_ACTION_IMAGE();
+                    //butterfly[i].action_image = RANDOM_BUTTERFLY_ACTION_IMAGE();
+                    butterfly[i].action_image = AR_GAME_BUTTERFLY_ACTION_IMAGE_1;
                 }
                 continue;
             }
@@ -209,12 +210,13 @@ void ar_game_butterfly_handle(ak_msg_t *msg) {
                 continue;
             }
 
-            butterfly[i].action_image++;
+            // butterfly[i].action_image++;
 
-            if(butterfly[i].action_image > AR_GAME_BUTTERFLY_ACTION_IMAGE_3)
-            {
-                butterfly[i].action_image = AR_GAME_BUTTERFLY_ACTION_IMAGE_1;
-            }
+            // if(butterfly[i].action_image > AR_GAME_BUTTERFLY_ACTION_IMAGE_3)
+            // {
+            //     butterfly[i].action_image = AR_GAME_BUTTERFLY_ACTION_IMAGE_1;
+            // }
+            butterfly[i].action_image = AR_GAME_BUTTERFLY_ACTION_IMAGE_1;
         }
 
     } break;
@@ -249,7 +251,8 @@ void ar_game_butterfly_handle(ak_msg_t *msg) {
                             butterfly[i].visible = BLACK;
                             butterfly[i].spawn_delay = rand() % BUTTERFLY_MAX_SPAWN_5_SEC;
                             
-                            butterfly[i].action_image = RANDOM_BUTTERFLY_ACTION_IMAGE();
+                            //butterfly[i].action_image = RANDOM_BUTTERFLY_ACTION_IMAGE();
+                            butterfly[i].action_image = AR_GAME_BUTTERFLY_ACTION_IMAGE_1;
 
                             if(ar_game_score >= 20) {
                                 ar_game_score -= 20;
