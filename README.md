@@ -86,9 +86,23 @@ Flash Partitions Layout
 
 The following section describes the gameplay and core mechanics of Fly Hunter. It serves as a reference for understanding the game's mechanics and firmware implementation.
 
-<div align="center">
+<!-- <div align="center">
   <video src="https://github.com/user-attachments/assets/8b70afef-360f-4585-9976-2dc426d1ed1a" controls width="480"></video>
-</div>     
+</div>      -->
+
+<table align="center">
+  <tr>
+    <td align="center"><img src="resources/images/screens/scr_game_menu.png" alt="Game menu" width="480"/></td>
+  </tr>
+</table>
+<p align="center"><strong><em>Figure 3:</em></strong> Menu screen</p>
+
+<table align="center">
+  <tr>
+    <td align="center"><img src="resources/images/screens/scr_setting.png" alt="Setting" width="480"/></td>
+  </tr>
+</table>
+<p align="center"><strong><em>Figure 4:</em></strong> Setting screen</p>
 
 When the game starts, the Main Menu is displayed with the following options:
 
@@ -98,7 +112,7 @@ When the game starts, the Main Menu is displayed with the following options:
 - **Exit:** Return to the idle screen.
 
 
-<p align="center"> <img src="resources/images/screens/scr_game_fly_hunter.png" width="320"><br> <em><b>Figure 3.</b> Gameplay Screen</em> </p>
+<p align="center"> <img src="resources/images/screens/scr_game_fly_hunter.png" width="320"><br> <em><b>Figure 5.</b> Gameplay Screen</em> </p>
 
 During gameplay, the player controls a hunter positioned on the left side of the screen. The objective is to shoot incoming Flies while avoiding the Butterfly decoy and surviving Boss encounters.
 
@@ -135,7 +149,7 @@ During gameplay, the player controls a hunter positioned on the left side of the
 
 <table align="center">
   <tr>
-    <td align="center"><img src="resources/images/screens/scr_game_over_2_4x.png" alt="zomwar game over screen 1" width="480"/></td>
+    <td align="center"><img src="resources/images/screens/scr_game_over_2_4x.png" alt="fly humter game over screen 1" width="480"/></td>
   </tr>
 </table>
 
