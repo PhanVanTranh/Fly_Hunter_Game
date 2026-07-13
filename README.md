@@ -86,13 +86,9 @@ Flash Partitions Layout
 
 The following section describes the gameplay and core mechanics of Fly Hunter. It serves as a reference for understanding the game's mechanics and firmware implementation.
 
-<!-- <div align="center">
-  <video src="https://github.com/user-attachments/assets/8b70afef-360f-4585-9976-2dc426d1ed1a" controls width="480"></video>
-</div>      -->
-
 <table align="center">
   <tr>
-    <td align="center"><img src="resources/images/screens/scr_game_menu.png" alt="Game menu" width="480"/></td>
+    <td align="center"><img src="resources/images/screens/scr_menu_game.png" alt="Game menu" width="480"/></td>
   </tr>
 </table>
 <p align="center"><strong><em>Figure 3:</em></strong> Menu screen</p>
