@@ -125,7 +125,7 @@ sequenceDiagram
     Timer->>Screen: AR_GAME_TIME_TICK
     Screen->>Fly: AR_GAME_FLY_RUN
     activate Fly
-    Note right of Fly: only runs while game_state == GAME_STATE_NORMALx -= setting setup.fly_speed advance action_image
+    Note right of Fly: only runs while game_state == GAME_STATE_NORMALx -= settingsetup.fly_speed advance action_image
     deactivate Fly
 
     Screen->>Fly: AR_GAME_FLY_DETONATOR
