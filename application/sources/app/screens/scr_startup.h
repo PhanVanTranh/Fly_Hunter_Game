@@ -20,6 +20,7 @@
 #include "screens.h"
 
 
+
 #define AC_DISPLAY_SHOW_GAME_LOGO     (AC_DISPLAY_SHOW_STARTUP_LOGO)
 
 extern view_dynamic_t dyn_view_startup;

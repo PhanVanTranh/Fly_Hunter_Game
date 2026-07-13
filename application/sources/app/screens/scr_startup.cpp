@@ -41,7 +41,7 @@ void view_startup_fly_hunter()
 
     view_render.setTextSize(2);
     view_render.setTextColor(WHITE);
-
+	
     view_render.setCursor(4,2);
     view_render.print("FLY HUNTER");
 
