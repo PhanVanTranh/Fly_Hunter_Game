@@ -34,7 +34,7 @@ sequenceDiagram
     end
 ```
 
-## II. Game Start — Object Initialization
+## II. Game Start
 
 ```mermaid
 sequenceDiagram
