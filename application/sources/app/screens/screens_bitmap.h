@@ -11,6 +11,7 @@ extern const unsigned char PROGMEM icon_sound[];
 extern const unsigned char PROGMEM icon_exit[];
 
 extern const unsigned char PROGMEM bitmap_heart[];
+extern const unsigned char PROGMEM bitmap_boss_bullet[];
 extern const unsigned char PROGMEM bitmap_fly_hunter_I []; 
 extern const unsigned char PROGMEM bitmap_fly_hunter_II [];
 extern const unsigned char PROGMEM bitmap_fly_I[];
