@@ -11,7 +11,7 @@
                                              ((y1) < ((y2) + (h2))) && \
                                              (((y1) + (h1)) > (y2)))
 
-#define RANDOM_FLY_ACTION_IMAGE() (rand() % AR_GAME_FLY_ACTION_IMAGE_3 + AR_GAME_FLY_ACTION_IMAGE_1)
+//#define RANDOM_FLY_ACTION_IMAGE() (rand() % AR_GAME_FLY_ACTION_IMAGE_3 + AR_GAME_FLY_ACTION_IMAGE_1)
 
 #define SAFE_DISTANCE_X     30
 #define SAFE_DISTANCE_Y     12
@@ -26,7 +26,7 @@ void ar_game_fly_handle(ak_msg_t *msg) {
 
         for (uint8_t i = 0; i < NUM_FLYs; i++) {
             fly[i].visible      = WHITE;
-            fly[i].action_image = RANDOM_FLY_ACTION_IMAGE();
+            fly[i].action_image = AR_GAME_FLY_ACTION_IMAGE_1;
             
             // Activate the position generation function so it does not overlap the butterfly
             fly_random_position(i); 
@@ -43,10 +43,11 @@ void ar_game_fly_handle(ak_msg_t *msg) {
         for (uint8_t i = 0; i < NUM_FLYs; i++) {
             if (fly[i].visible == WHITE) {
                 fly[i].x -= settingsetup.fly_speed;
-                fly[i].action_image++;
-                if (fly[i].action_image > AR_GAME_FLY_ACTION_IMAGE_3) {
-                    fly[i].action_image = AR_GAME_FLY_ACTION_IMAGE_1;
-                }
+                // fly[i].action_image++;
+                // if (fly[i].action_image > AR_GAME_FLY_ACTION_IMAGE_3) {
+                //     fly[i].action_image = AR_GAME_FLY_ACTION_IMAGE_1;
+                // }
+                fly[i].action_image = AR_GAME_FLY_ACTION_IMAGE_1;
             }
         }
 		
@@ -77,7 +78,8 @@ void ar_game_fly_handle(ak_msg_t *msg) {
 
                             
                             fly_random_position(i);
-                            fly[i].action_image = RANDOM_FLY_ACTION_IMAGE();
+                            //fly[i].action_image = RANDOM_FLY_ACTION_IMAGE();
+                            fly[i].action_image = AR_GAME_FLY_ACTION_IMAGE_1;
                             fly[i].visible = WHITE;
 
                             if (settingsetup.num_arrow < MAX_NUM_ARROW) {
@@ -87,7 +89,7 @@ void ar_game_fly_handle(ak_msg_t *msg) {
                             // Update score and play sound
                             ar_game_score += 10;
 							/*==============================
-								Kiểm tra Boss
+								Check boss state
 							==============================*/
 							if(game_state == GAME_STATE_NORMAL)
 							{
@@ -118,40 +120,6 @@ void ar_game_fly_handle(ak_msg_t *msg) {
 
     default:
         break;
-    }
-}
-
-void fly_adjust_position(uint8_t index)
-{
-    uint8_t attempts = 0;
-
-    while(attempts < MAX_POSITION_ATTEMPTS)
-    {
-        bool overlap = false;
-
-        for(uint8_t i = 0; i < NUM_BUTTERFLIES; i++)
-        {
-            if(butterfly[i].visible == WHITE)
-            {
-                if(abs((int)fly[index].x - (int)butterfly[i].x) < SAFE_DISTANCE_X &&
-                   abs((int)fly[index].y - (int)butterfly[i].y) < SAFE_DISTANCE_Y)
-                {
-                    overlap = true;
-                    break;
-                }
-            }
-        }
-
-        if(!overlap)
-        {
-            if (fly[index].y > (52 - SIZE_BITMAP_FLYs_Y)) {
-                fly[index].y = 52 - SIZE_BITMAP_FLYs_Y; 
-            }
-            return;
-        }
-
-        fly[index].x = RANDOM_FLY_X();
-        attempts++;
     }
 }
 

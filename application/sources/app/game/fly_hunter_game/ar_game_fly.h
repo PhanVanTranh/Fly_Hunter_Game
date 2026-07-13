@@ -40,6 +40,5 @@ typedef struct {
 } ar_game_fly_t;
 
 extern ar_game_fly_t fly[NUM_FLYs];
-void fly_adjust_position(uint8_t index);
 void fly_random_position(uint8_t index);
 #endif //__AR_GAME_FLY_H__
