@@ -18,13 +18,14 @@
 
 ## Introduction                            
 
-**Fly Hunter** is a 2D shooting mini-game built on the AK Embedded Base Kit, inspired by classic side-scrolling shooters. The player controls a hunter standing at a fixed border on the left side of the screen, aiming and shooting arrows at incoming flies, butterflies before they cross the border. Every few hundred points, a **Boss** appears with its own HP bar and bullet attacks, raising the difficulty and testing the player's reflexes.
+**Fly Hunter** is a 2D shooting mini-game built on the AK Embedded Base Kit, inspired by classic side-scrolling shooters. The player controls a hunter standing at a fixed border on the left side of the screen, aiming and shooting arrows at incoming Flies before they cross the border, while avoiding a decoy **Butterfly** that punishes careless shots. Every few hundred points, a **Boss** appears with its own HP bar and bullet attacks, raising the difficulty and testing the player's reflexes.
 
 Like other embedded games built on the AK platform, Fly Hunter is also a practical showcase of embedded system design concepts:
 - **System design** — screens and game objects organized as independent, event-driven modules (UML-style).
 - **Process management** — each game object (Hunter, Arrow, Fly, Butterfly, Boss, Boss Bullet, Bang, Border) is handled as its own task with its own message handler.
 - **Communication** — objects talk to each other purely through **Signal / Timer / Message**, no direct function coupling.
 - **Control logic** — screen navigation is implemented as a **Finite State Machine**, and gameplay difficulty scales through a simple state machine.
+
 
 ### I. Hardware            
 
@@ -96,9 +97,7 @@ When the game starts, the Main Menu is displayed with the following options:
 
 <p align="center"> <img src="resources/images/screens/scr_game_fly_hunter.png" width="320"><br> <em><b>Figure 3.</b> Gameplay Screen</em> </p>
 
-During gameplay, the player controls a hunter positioned on the left side of the screen. The objective is to shoot incoming enemies while avoiding penalties.
-
-
+During gameplay, the player controls a hunter positioned on the left side of the screen. The objective is to shoot incoming Flies while avoiding the Butterfly decoy and surviving Boss encounters.
 
 #### Objects in the Game:
 
@@ -107,7 +106,7 @@ During gameplay, the player controls a hunter positioned on the left side of the
 | **Hunter** | <p align="center"><img src="resources/images/bitmap/archery_1.png" width="100"/></p>| The player character. Stands at the shooting position and fires arrows.|
 | **Arrow** | <p align="center"><img src="resources/images/bitmap/arrow.png" width="100"/></p>| Projectile fired by the Hunter. Travels across the screen and destroys any Fly, Butterfly, or Boss it hits. |
 | **Fly** | <p align="center"><img src="resources/images/bitmap/bitmap_fly_hunter_I.png" width="100"/></p> | The main enemy wave. Flies in from the right side toward the border on the left. If it crosses the border, the player loses one life. Spawn speed increases as the score rises. |
-| **Butterfly** | <p align="center"><img src="resources/images/bitmap/bitmap_butterfly_I.png" width="100"/></p> | A special trap object. Shows a floating `-20` text and penalizes the score when involved, adding risk/reward to the fight. |
+| **Butterfly** | <p align="center"><img src="resources/images/bitmap/bitmap_butterfly_I.png" width="100"/></p> | A decoy object. Shows a floating `-20` text and penalizes the score when involved, adding risk/reward to the fight. |
 | **Boss** | <p align="center"><img src="resources/images/bitmap/bitmap_fly_hunter_II.png" width="100"/></p> | A large enemy that spawns once the score passes a threshold. |
 | **Boss Bullet** | <p align="center"><img src="resources/images/bitmap/bitmap_bullet.png" width="100"/></p> | Projectile fired back by the Boss at the player. |
 | **Bang (Explosion)** | <p align="center"><img src="resources/images/bitmap/bang_1.png" width="100"/></p>| Generic explosion effect played whenever an object is destroyed. |
@@ -130,7 +129,7 @@ During gameplay, the player controls a hunter positioned on the left side of the
 - A Boss spawns once the score reaches **500**, and again every **+500** points after that. When the threshold approaches, a **"WARNING - BOSS INCOMING"** banner flashes with a 3-beep alert before the Boss spawns.
 - Defeating a Boss rewards **+300 score** and **+1 extra life** (capped at 3), and increases the Boss's HP for the next encounter.
 - Before starting, players can fine-tune the challenge from the **Settings** screen: number of arrows, Fly speed, and silent mode (mute sound effects).
-- 
+
 <table align="center">
   <tr>
     <td align="center"><img src="resources/images/screens/scr_game_over_2_4x.png" alt="zomwar game over screen 1" width="480"/></td>
@@ -139,9 +138,9 @@ During gameplay, the player controls a hunter positioned on the left side of the
 
 ### IV - Basic Game Sequence Logic
 
-The screens and objects communicate purely through the message/timer system of the AK framework (`SCREEN_ENTRY`, `AR_GAME_TIME_TICK`, `AR_GAME_CHECK_GAME_OVER`, `AR_GAME_RESET`, ...). A high-level flow:
+The screens and objects communicate purely through the message/timer system of the AK framework (`SCREEN_ENTRY`, `AR_GAME_TIME_TICK`, `AR_GAME_CHECK_GAME_OVER`, `AR_GAME_RESET`, ...).
 
-> **Note:** For a more detailed runtime design, see **Runtime Signal Processing**.
+> **Note:** for the full, per-object breakdown of this flow, see [docs/03-design-sequence-object.md](./docs/03-design-sequence-object.md) and [docs/04-design-sequence-runtime.md](./docs/04-design-sequence-runtime.md).
 
 ```mermaid
 %%{init: {
@@ -159,80 +158,85 @@ The screens and objects communicate purely through the message/timer system of t
 
 sequenceDiagram
     actor Player
-    participant AK
-    participant Screen
+    participant AK as AK Framework
+    participant Screen as scr_fly_hunter_game
     participant Hunter
-    participant Bullet
+    participant Arrow
     participant Fly
     participant Butterfly
     participant Boss
-    participant BossBullet
+    participant BossBullet as Boss Bullet
     participant Border
 
-    Player->>Screen: SCREEN_ENTRY
+    Player->>Screen: SCREEN_ENTRY (Start Game)
     activate Screen
 
-    Screen->>Hunter: FH_GAME_HUNTER_SETUP
-    Screen->>Bullet: FH_GAME_BULLET_SETUP
-    Screen->>Fly: FH_GAME_FLY_SETUP
-    Screen->>Butterfly: FH_GAME_BUTTERFLY_SETUP
-    Screen->>Boss: FH_GAME_BOSS_SETUP
-    Screen->>BossBullet: FH_GAME_BOSS_BULLET_SETUP
-    Screen->>Border: FH_GAME_BORDER_SETUP
+    Screen->>Hunter: AR_GAME_FLY_HUNTER_SETUP
+    Screen->>Arrow: AR_GAME_ARROW_SETUP
+    Screen->>Fly: AR_GAME_FLY_SETUP
+    Screen->>Butterfly: AR_GAME_BUTTERFLY_SETUP
+    Screen->>Boss: AR_GAME_BOSS_SETUP
+    Screen->>BossBullet: AR_GAME_BOSS_BULLET_SETUP
+    Screen->>Border: AR_GAME_BORDER_SETUP
 
-    Note over Screen: Game State = PLAYING
+    Note over Screen: ar_game_state = GAME_PLAYnext_boss_score = 500
+    Screen->>Screen: timer_set(AR_GAME_TIME_TICK, PERIODIC)
 
-    loop Every Game Tick
+    loop Every AR_GAME_TIME_TICK
 
-        AK->>Hunter: AR_GAME_TIME_TICK
-        Hunter->>Hunter: Read buttons\nMove Up / Down
+        AK->>Hunter: AR_GAME_FLY_HUNTER_UPDATE
+        Hunter->>Hunter: apply UP/DOWN movement
 
-        AK->>Bullet: AR_GAME_TIME_TICK
-        Bullet->>Bullet: Shoot & Move
+        AK->>Arrow: AR_GAME_ARROW_RUN
+        Arrow->>Arrow: move active arrows right
 
-        AK->>Fly: AR_GAME_TIME_TICK
-        Fly->>Fly: Spawn & Move Left
+        AK->>Fly: AR_GAME_FLY_RUN
+        Fly->>Fly: move left, animate
 
-        AK->>Butterfly: AR_GAME_TIME_TICK
-        Butterfly->>Butterfly: Spawn & Move Left
+        AK->>Butterfly: AR_GAME_BUTTERFLY_RUN
+        Butterfly->>Butterfly: move on sine-wave path
 
-        alt Bullet hits Fly
-            Bullet-->>Fly: Collision
-            Fly-->>Screen: +10 Score
+        alt Arrow hits Fly
+            Arrow-->>Fly: AR_GAME_FLY_DETONATOR
+            Fly-->>Screen: +10 Score, refill 1 arrow
         end
 
-        alt Bullet hits Butterfly
-            Bullet-->>Butterfly: Collision
-            Butterfly-->>Screen: -10 Score
+        alt Arrow hits Butterfly
+            Arrow-->>Butterfly: AR_GAME_BUTTERFLY_DETONATOR
+            Butterfly-->>Screen: -20 Score (shown as floating text)
         end
 
-        alt Score reaches 500,1000,1500,...
-            Screen->>Boss: Spawn Boss
+        Screen->>Border: AR_GAME_LEVEL_UP
+        Note right of Border: score >= next_level_score (300, 600, ...)-> Fly speed++
+
+        alt Score reaches 500, 1000, 1500, ...
+            Screen->>Screen: GAME_STATE_WARNINGflash "BOSS INCOMING" + 3-beep
+            Screen->>Boss: AR_GAME_BOSS_SPAWN
         end
 
         alt Boss Active
-            AK->>Boss: Update Boss
-            Boss->>BossBullet: Fire Bullet
-            BossBullet->>Hunter: Collision Check
+            AK->>Boss: AR_GAME_BOSS_RUN
+            Boss->>BossBullet: fire toward Hunter's row
+            BossBullet-->>Hunter: collision check -> life-- if hit
         end
 
-        alt Bullet hits Boss
-            Bullet-->>Boss: Damage
+        alt Arrow hits Boss
+            Arrow-->>Boss: AR_GAME_BOSS_DETONATOR
+            Boss-->>Boss: hp--
         end
 
         alt Boss HP == 0
-            Boss-->>Screen: Boss Defeated
-            Screen-->>Player: Bonus Score
+            Boss-->>Screen: +300 Score, +1 life (capped at 3)
         end
 
-        alt Enemy reaches Border
-            Fly-->>Border: Cross Border
-            Border-->>Screen: Lose 1 Heart
+        Screen->>Border: AR_GAME_CHECK_GAME_OVER
+        alt a Fly (or the Boss) reaches the Border
+            Border-->>Screen: life--
         end
 
-        alt Hearts == 0
-            Screen->>AK: AR_GAME_RESET
-            Screen->>Player: GAME OVER
+        alt life == 0
+            Screen->>AK: AR_GAME_RESET (posted once)
+            Screen->>Player: SCREEN_TRAN -> scr_game_over (GAME OVER)
         end
 
     end
@@ -240,10 +244,9 @@ sequenceDiagram
     deactivate Screen
 ```
 
-See [docs/04-design-sequence-runtime.md](./docs/04-design-sequence-runtime.md) for the full Mermaid sequence diagram.
 
 ## Contact & Support
 
 [![GitHub](https://img.shields.io/badge/GitHub-PhanVanTranh-181717?style=flat&logo=github)](https://github.com/PhanVanTranh)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)](www.linkedin.com/in/tranh-phan-3b7785311)
-[![Gmail](https://img.shields.io/badge/Gmail-Contact-EA4335?style=flat&logo=gmail&logoColor=white)](phantranh2304@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)]([www.linkedin.com/in/tranh-phan-3b7785311](https://www.linkedin.com/in/tranh-phan-3b7785311))
+[![Gmail](https://img.shields.io/badge/Gmail-Contact-EA4335?style=flat&logo=gmail&logoColor=white)](mailto:phantranh2304@gmail.com)
