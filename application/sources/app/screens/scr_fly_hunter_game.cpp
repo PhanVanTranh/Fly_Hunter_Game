@@ -76,30 +76,38 @@ void ar_game_arrow_display() {
 void ar_game_fly_display() {
 	for (uint8_t i = 0; i < NUM_FLYs; i++) {
 		if (fly[i].visible == WHITE) {
-			if (fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_1) {
+			// if (fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_1) {
+			// 	view_render.drawBitmap(	fly[i].x, \
+			// 							fly[i].y, \
+			// 							bitmap_fly_I, \
+			// 							SIZE_BITMAP_FLYs_X, \
+			// 							SIZE_BITMAP_FLYs_Y, \
+			// 	 					WHITE);
+			// }
+			// else if (fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_2) {
+			// 	view_render.drawBitmap(	fly[i].x, \
+			// 							fly[i].y, \
+			// 							bitmap_fly_II, \
+			// 							SIZE_BITMAP_FLYs_X, \
+			// 							SIZE_BITMAP_FLYs_Y, \
+			// 							WHITE);
+			// }
+			// else if (fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_3) {
+			// 	view_render.drawBitmap(	fly[i].x, \
+			// 							fly[i].y, \
+			// 							bitmap_fly_III, \
+			// 							SIZE_BITMAP_FLYs_X, \
+			// 							SIZE_BITMAP_FLYs_Y, \
+			// 	 						WHITE);
+			// }
+
+			//fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_1) 
 				view_render.drawBitmap(	fly[i].x, \
 										fly[i].y, \
 										bitmap_fly_I, \
 										SIZE_BITMAP_FLYs_X, \
 										SIZE_BITMAP_FLYs_Y, \
 				 					WHITE);
-			}
-			else if (fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_2) {
-				view_render.drawBitmap(	fly[i].x, \
-										fly[i].y, \
-										bitmap_fly_II, \
-										SIZE_BITMAP_FLYs_X, \
-										SIZE_BITMAP_FLYs_Y, \
-										WHITE);
-			}
-			else if (fly[i].action_image == AR_GAME_FLY_ACTION_IMAGE_3) {
-				view_render.drawBitmap(	fly[i].x, \
-										fly[i].y, \
-										bitmap_fly_III, \
-										SIZE_BITMAP_FLYs_X, \
-										SIZE_BITMAP_FLYs_Y, \
-				 						WHITE);
-			}
 		}
 	}
 }
@@ -110,44 +118,52 @@ void ar_game_butterfly_display() {
 
         if(butterfly[i].visible == WHITE) {
 
-            switch(butterfly[i].action_image) {
+            // switch(butterfly[i].action_image) {
 
-            case AR_GAME_BUTTERFLY_ACTION_IMAGE_1:
+            // case AR_GAME_BUTTERFLY_ACTION_IMAGE_1:
 
-                view_render.drawBitmap(
+            //     view_render.drawBitmap(
+            //         butterfly[i].x,
+            //         butterfly[i].y,
+            //         bitmap_butterfly_I,
+            //         SIZE_BITMAP_BUTTERFLY_X,
+            //         SIZE_BITMAP_BUTTERFLY_Y,
+            //         WHITE);
+
+            //     break;
+
+            // case AR_GAME_BUTTERFLY_ACTION_IMAGE_2:
+
+            //     view_render.drawBitmap(
+            //         butterfly[i].x,
+            //         butterfly[i].y,
+            //         bitmap_butterfly_II,
+            //         SIZE_BITMAP_BUTTERFLY_X,
+            //         SIZE_BITMAP_BUTTERFLY_Y,
+            //         WHITE);
+
+            //     break;
+
+            // case AR_GAME_BUTTERFLY_ACTION_IMAGE_3:
+
+            //     view_render.drawBitmap(
+            //         butterfly[i].x,
+            //         butterfly[i].y,
+            //         bitmap_butterfly_III,
+            //         SIZE_BITMAP_BUTTERFLY_X,
+            //         SIZE_BITMAP_BUTTERFLY_Y,
+            //         WHITE);
+
+            //     break;
+            // }
+
+			view_render.drawBitmap(
                     butterfly[i].x,
                     butterfly[i].y,
                     bitmap_butterfly_I,
                     SIZE_BITMAP_BUTTERFLY_X,
                     SIZE_BITMAP_BUTTERFLY_Y,
                     WHITE);
-
-                break;
-
-            case AR_GAME_BUTTERFLY_ACTION_IMAGE_2:
-
-                view_render.drawBitmap(
-                    butterfly[i].x,
-                    butterfly[i].y,
-                    bitmap_butterfly_II,
-                    SIZE_BITMAP_BUTTERFLY_X,
-                    SIZE_BITMAP_BUTTERFLY_Y,
-                    WHITE);
-
-                break;
-
-            case AR_GAME_BUTTERFLY_ACTION_IMAGE_3:
-
-                view_render.drawBitmap(
-                    butterfly[i].x,
-                    butterfly[i].y,
-                    bitmap_butterfly_III,
-                    SIZE_BITMAP_BUTTERFLY_X,
-                    SIZE_BITMAP_BUTTERFLY_Y,
-                    WHITE);
-
-                break;
-            }
         }
     }
 	for(uint8_t i=0;i<NUM_BUTTERFLIES;i++)
