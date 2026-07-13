@@ -22,8 +22,8 @@
 
 #define NUM_BOSS_BULLET             4
 
-#define SIZE_BITMAP_BOSS_BULLET_X   4
-#define SIZE_BITMAP_BOSS_BULLET_Y   4
+#define SIZE_BITMAP_BOSS_BULLET_X   5
+#define SIZE_BITMAP_BOSS_BULLET_Y   5
 
 /**************************************************/
 

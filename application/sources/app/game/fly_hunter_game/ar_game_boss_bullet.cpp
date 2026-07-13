@@ -51,7 +51,7 @@ static void boss_fire_one_bullet()
                 boss.x + 4;
 
             boss_bullet[i].y =
-                boss.y + SIZE_BITMAP_BOSS_Y/2;
+                boss.y + SIZE_BITMAP_BOSS_Y/2 - 2;
 
             boss_bullet[i].vx = -3;
 
