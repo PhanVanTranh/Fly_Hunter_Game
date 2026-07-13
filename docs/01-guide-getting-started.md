@@ -146,7 +146,7 @@ Full per-object detail: [03-design-sequence-object.md](./03-design-sequence-obje
 
 ## 11. Game Over
 
-The game ends when the player's lives reach **0**. The session score is compared against the Top-3 high scores stored in EEPROM and saved if it qualifies. See [06-eeprom-data-storage.md](./06-eeprom-data-storage.md).
+The game ends when the player's lives reach **0**. The session score is compared against the Top-3 high scores stored in EEPROM and saved if it qualifies. 
 
 ---
 
@@ -164,7 +164,7 @@ The **Settings** screen lets players configure:
 - **FLY SPEED** — Fly movement speed (`fly_speed`)
 - **SOUND** — on/off toggle (`silent`)
 
-All three are persisted to EEPROM. See [06-eeprom-data-storage.md](./06-eeprom-data-storage.md) for the exact struct layout.
+All three are persisted to EEPROM.
 
 ---
 
@@ -191,8 +191,6 @@ Debug & iterate
 | [02-guide-coding-rule.md](./02-guide-coding-rule.md) | Coding conventions and the message-driven object pattern |
 | [03-design-sequence-object.md](./03-design-sequence-object.md) | Per-object sequence diagrams |
 | [04-design-sequence-runtime.md](./04-design-sequence-runtime.md) | Full runtime signal flow |
-| [05-buzzer-audio.md](./05-buzzer-audio.md) | Sound effects reference |
-| [06-eeprom-data-storage.md](./06-eeprom-data-storage.md) | EEPROM layout for settings & scores |
 
 ---
 

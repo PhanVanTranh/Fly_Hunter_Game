@@ -31,12 +31,12 @@ sequenceDiagram
 
     Screen->>Hunter: AR_GAME_FLY_HUNTER_SETUP
     activate Hunter
-    Note right of Hunter: x, y = AXIS_X/Y_FLY_HUNTERaction_image based on num_arrow
+    Note right of Hunter: x, y = AXIS_X/Y_FLY_HUNTER action_image based on num_arrow
     deactivate Hunter
 
     Button->>Hunter: AR_GAME_FLY_HUNTER_UP
     activate Hunter
-    Note right of Hunter: fly_hunter_y -= STEPclamp to AXIS_Y_FLY_HUNTER_MIN (10)
+    Note right of Hunter: fly_hunter_y -= STEP clamp to AXIS_Y_FLY_HUNTER_MIN (10)
     deactivate Hunter
 
     Timer->>Screen: AR_GAME_TIME_TICK
@@ -47,7 +47,7 @@ sequenceDiagram
 
     Button->>Hunter: AR_GAME_FLY_HUNTER_DOWN
     activate Hunter
-    Note right of Hunter: fly_hunter_y += STEPclamp to AXIS_Y_FLY_HUNTER_MAX (50)
+    Note right of Hunter: fly_hunter_y += STEP clamp to AXIS_Y_FLY_HUNTER_MAX (50)
     deactivate Hunter
 
     Screen->>Hunter: AR_GAME_FLY_HUNTER_RESET
@@ -91,7 +91,7 @@ sequenceDiagram
     activate Arrow
     Note right of Arrow: x += settingsetup.arrow_speed
     alt arrow reaches MAX_AXIS_X_ARROW
-        Note right of Arrow: hide arrow, x = 0num_arrow++, restore "ready" sprite
+        Note right of Arrow: hide arrow, x = 0 num_arrow++, restore "ready" sprite
     end
     deactivate Arrow
 
@@ -125,7 +125,7 @@ sequenceDiagram
     Timer->>Screen: AR_GAME_TIME_TICK
     Screen->>Fly: AR_GAME_FLY_RUN
     activate Fly
-    Note right of Fly: only runs while game_state == GAME_STATE_NORMALx -= settingsetup.fly_speedadvance action_image
+    Note right of Fly: only runs while game_state == GAME_STATE_NORMALx -= settingsetup.fly_speed advance action_image
     deactivate Fly
 
     Screen->>Fly: AR_GAME_FLY_DETONATOR
@@ -134,9 +134,9 @@ sequenceDiagram
     alt arrow hits Fly
         Note right of Fly: hide Fly + arrowrespawn Fly at a new lane
         Fly->>Bang: show explosion at hit position
-        Note right of Fly: score += 10num_arrow++ (if below max)
+        Note right of Fly: score += 10 num_arrow++ (if below max)
         alt score >= next_boss_score
-            Note right of Fly: game_state = GAME_STATE_WARNINGwarning_timer = 90next_boss_score += 500
+            Note right of Fly: game_state = GAME_STATE_WARNING warning_timer = 90 next_boss_score += 500
         end
     end
     deactivate Fly
@@ -185,7 +185,7 @@ sequenceDiagram
     activate Butterfly
     Butterfly-->>Arrow: check visible arrows vs visible Butterfly
     alt arrow hits Butterfly
-        Note right of Butterfly: hide Butterfly + arrowshow floating "-20" textschedule next spawn
+        Note right of Butterfly: hide Butterfly + arrowshow floating "-20" text schedule next spawn
         Note right of Butterfly: score -= 20 (floored at 0)
         Butterfly->>Buzzer: BUZZER_SOUND_BEE
     end
@@ -230,7 +230,7 @@ sequenceDiagram
     alt state == BOSS_STATE_DYING
         Note right of Boss: advance explode_frame every 4 tickson finish: hide, +300 score, +1 life (capped),next_boss_score += 500, boss_hp += 5,respawn Fly + Butterfly
     else game_state == GAME_STATE_BOSS
-        Note right of Boss: move left 1px + oscillate y every 2 ticksdecay shake/hit-flash timersdisplay_hp eases toward hp
+        Note right of Boss: move left 1px + oscillate y every 2 ticksdecay shake/hit-flash timers display_hp eases toward hp
         alt boss.x reaches the Border
             Note right of Boss: hide boss, reset Bulletlife-- (BUZZER_SOUND_HIT)if life == 0: post AR_GAME_RESET (once)else: game_state = NORMAL, respawn Fly + Butterfly
         end
@@ -241,7 +241,7 @@ sequenceDiagram
     activate Boss
     Boss-->>Arrow: check visible arrows vs Boss (only while BOSS_STATE_ALIVE)
     alt arrow hits Boss
-        Note right of Boss: hp--, hit_flash = 6, shake_timer = 8num_arrow++ (if below max)
+        Note right of Boss: hp--, hit_flash = 6, shake_timer = 8 num_arrow++ (if below max)
         alt hp > 0
             Boss->>Buzzer: BUZZER_SOUND_BANG
         else hp == 0
@@ -282,12 +282,12 @@ sequenceDiagram
     Timer->>Bullet: AR_GAME_BOSS_BULLET_FIRE
     activate Bullet
     Note right of Bullet: fire one bullet toward Hunter's yvx = -3, vy in {-1,0,1}
-    Bullet->>Timer: re-schedule FIREinterval shrinks as boss.hp drops (700/500/350 ms)
+    Bullet->>Timer: re-schedule FIRE interval shrinks as boss.hp drops (700/500/350 ms)
     deactivate Bullet
 
     Screen->>Bullet: AR_GAME_BOSS_BULLET_RUN (every game tick)
     activate Bullet
-    Note right of Bullet: x += vx, y += vyhide if off-screen
+    Note right of Bullet: x += vx, y += vy hide if off-screen
     Bullet-->>Hunter: check collision with Hunter
     alt bullet hits Hunter
         Note right of Bullet: hide bulletlife-- (BUZZER_SOUND_BANG)
