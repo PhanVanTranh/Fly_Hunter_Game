@@ -179,7 +179,7 @@ sequenceDiagram
     Screen->>BossBullet: AR_GAME_BOSS_BULLET_SETUP
     Screen->>Border: AR_GAME_BORDER_SETUP
 
-    Note over Screen: ar_game_state = GAME_PLAYnext_boss_score = 500
+    Note over Screen: ar_game_state = GAME_PLAY next_boss_score = 500
     Screen->>Screen: timer_set(AR_GAME_TIME_TICK, PERIODIC)
 
     loop Every AR_GAME_TIME_TICK
@@ -210,7 +210,7 @@ sequenceDiagram
         Note right of Border: score >= next_level_score (300, 600, ...)-> Fly speed++
 
         alt Score reaches 500, 1000, 1500, ...
-            Screen->>Screen: GAME_STATE_WARNINGflash "BOSS INCOMING" + 3-beep
+            Screen->>Screen: GAME_STATE_WARNING flash "WARNING BOSS INCOMING" + 3-beep
             Screen->>Boss: AR_GAME_BOSS_SPAWN
         end
 
