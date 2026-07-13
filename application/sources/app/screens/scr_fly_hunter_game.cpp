@@ -1,48 +1,18 @@
 #include "scr_fly_hunter_game.h"
 
-#include <stdlib.h>
-
 #include "screens.h"
-
 
 /*****************************************************************************/
 /* Variable Declaration - fly_hunter game screen */
 /*****************************************************************************/
-#define AR_GAME_COMMAND_TEXT_MAX_LEN		(10)
-#define AR_GAME_HIGHSCORE_SCORE				(300)
-#define AR_GAME_ARRAY_SIZE(arr)				(sizeof(arr) / sizeof((arr)[0]))
-
 extern uint8_t border_flash;
-uint8_t ar_game_state; 
+uint8_t ar_game_state;
 ar_game_setting_t settingsetup;
-static uint8_t ar_game_over_text_index = 0;
 
 game_state_t game_state = GAME_STATE_NORMAL;
 
 uint16_t warning_timer = 0;
-
 uint16_t next_boss_score = 500;
-
-static const char* ar_game_over_text = " Too Bad!";
-static const char* const ar_game_praise_text[] = {
-    "Excellent",  // 9
-    "Good Job!",  // 9
-    "  Great!",   // 8
-    " Amazing!",  // 9
-    " Winner!"    // 8
-};
-
-static const char* const ar_game_blame_text[] = {
-    " Too Bad!",  // 9
-    " Try More",  // 9
-    " Missed!",   // 8
-    "  Oops!",    // 6
-    " So Close"   // 9
-};
-
-static const char* ar_game_random_text(const char* const* text_list, uint8_t text_count) {
-	return text_list[rand() % text_count];
-}
 
 /*****************************************************************************/
 /* View - fly_hunter game screen*/
@@ -50,11 +20,7 @@ static const char* ar_game_random_text(const char* const* text_list, uint8_t tex
 void ar_game_frame_display() {
 	view_render.setTextSize(1);
 	view_render.setTextColor(WHITE);
-	// view_render.setCursor(2,55);
-	// view_render.print("Arrow:");
-	// view_render.print(settingsetup.num_arrow);
-	//view_render.setCursor(2,54);
-	//view_render.print("Heart:");
+
 	for(uint8_t i = 0; i < player_life; i++) {
     view_render.drawBitmap(
         2 + i * 10,
@@ -393,15 +359,17 @@ void ar_game_boss_display()
 
 void ar_game_boss_bullet_display()
 {
-    for(uint8_t i=0;i<NUM_BOSS_BULLET;i++)
+    for(uint8_t i = 0; i < NUM_BOSS_BULLET; i++)
     {
         if(boss_bullet[i].visible == BLACK)
             continue;
 
-        view_render.fillCircle(
+        view_render.drawBitmap(
             boss_bullet[i].x,
             boss_bullet[i].y,
-            2,
+            bitmap_boss_bullet,
+            SIZE_BITMAP_BOSS_BULLET_X,
+            SIZE_BITMAP_BOSS_BULLET_Y,
             WHITE);
     }
 }
@@ -573,9 +541,6 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		task_post_pure_msg(AR_GAME_BUTTERFLY_ID,          AR_GAME_BUTTERFLY_RESET);
 		task_post_pure_msg(AR_GAME_BOSS_ID,			AR_GAME_BOSS_RESET);
 		task_post_pure_msg(AR_GAME_BOSS_BULLET_ID,  AR_GAME_BOSS_BULLET_RESET);
-		// Reset text animation index
-		ar_game_over_text_index = 0;
-
 		// Save and reset Score
 		ar_game_score_read(&gamescore);
 		gamescore.score_now = ar_game_score;
@@ -583,21 +548,8 @@ void scr_fly_hunter_game_handle(ak_msg_t* msg) {
 		ar_game_score_write(&gamescore);
 		ar_game_score = 10;
 
-		if (gamescore.score_now > AR_GAME_HIGHSCORE_SCORE) {
-			ar_game_over_text = ar_game_random_text(ar_game_praise_text, \
-													AR_GAME_ARRAY_SIZE(ar_game_praise_text));
-			BUZZER_PlaySound(BUZZER_SOUND_HIGHSCORE);
-		}
-		else {
-			ar_game_over_text = ar_game_random_text(ar_game_blame_text, \
-													AR_GAME_ARRAY_SIZE(ar_game_blame_text));
-			BUZZER_PlaySound(BUZZER_SOUND_LOWSCORE);
-		}
-
 		// State update
 		ar_game_state = GAME_OFF;
-
-
 		SCREEN_TRAN(scr_game_over_handle, &scr_game_over);
 	} break;
 
