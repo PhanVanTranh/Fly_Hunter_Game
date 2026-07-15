@@ -261,5 +261,5 @@ sequenceDiagram
 ## Contact & Support
 
 [![GitHub](https://img.shields.io/badge/GitHub-PhanVanTranh-181717?style=flat&logo=github)](https://github.com/PhanVanTranh)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat&logo=linkedin)]([www.linkedin.com/in/tranh-phan-3b7785311](https://www.linkedin.com/in/tranh-phan-3b7785311))
-[![Gmail](https://img.shields.io/badge/Gmail-Contact-EA4335?style=flat&logo=gmail&logoColor=white)](mailto:phantranh2304@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-PhanVanTranh-0A66C2?style=flat&logo=linkedin)]([www.linkedin.com/in/tranh-phan-3b7785311](https://www.linkedin.com/in/tranh-phan-3b7785311))
+[![Gmail](https://img.shields.io/badge/Gmail-PhanVanTranh-EA4335?style=flat&logo=gmail&logoColor=white)](mailto:phantranh2304@gmail.com)
