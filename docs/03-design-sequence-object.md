@@ -400,4 +400,4 @@ sequenceDiagram
 | Boss Bullet | `application/sources/app/game/fly_hunter_game/ar_game_boss_bullet.cpp` | `ar_game_boss_bullet.h` |
 | Bang | `application/sources/app/game/fly_hunter_game/ar_game_bang.cpp` | `ar_game_bang.h` |
 | Border | `application/sources/app/game/fly_hunter_game/ar_game_border.cpp` | `ar_game_border.h` |
-| Gameplay screen (orchestrates all of the above) | `application/sources/app/screens/scr_fly_hunter_game.cpp` | `scr_fly_hunter_game.h` |
+| Gameplay screen | `application/sources/app/screens/scr_fly_hunter_game.cpp` | `scr_fly_hunter_game.h` |
