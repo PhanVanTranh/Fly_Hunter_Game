@@ -1,7 +1,7 @@
 # Fly Hunter Game
 
 <div align="center">
-  <video src="https://github.com/user-attachments/assets/e24911bf-5073-4d07-a8e8-738927585d1b" controls width="480"></video>
+  <video src="https://github.com/user-attachments/assets/b359d53f-3f49-4647-9382-15ccc78aafe5" controls width="480"></video>
 
 ![Profile Views](https://komarev.com/ghpvc/?username=PhanVanTranh&color=007ec6&style=flat-square)
 
